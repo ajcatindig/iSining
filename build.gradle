@@ -1,0 +1,67 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    apply from: 'dependencies.gradle'
+    apply from: 'projectConfig.gradle'
+
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url("https://plugins.gradle.org/m2/")
+        }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${androidGradlePluginVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$daggerHiltVersion"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:$ktlintVersion"
+        classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
+        classpath "org.jetbrains.kotlinx:kover:$koverVersion"
+    }
+}
+
+apply from: 'dependencies.gradle'
+apply from: 'projectConfig.gradle'
+apply plugin: 'kover'
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+}
+
+subprojects {
+    apply plugin: 'org.jlleitschuh.gradle.ktlint'
+    apply plugin: 'jacoco'
+
+    jacoco {
+        toolVersion = jacocoVersion
+        reportsDirectory.set(layout.buildDirectory.dir("jacocoReports"))
+    }
+
+    ktlint {
+        debug = false
+        android = true
+        outputToConsole = true
+        outputColorName = "RED"
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+tasks.koverMergedHtmlReport {
+    enabled = true                          // false to disable report generation
+    htmlReportDir.set(layout.buildDirectory.dir("kover-project-report/html-result"))
+    excludes = [
+            'dagger.hilt.*',
+            'hilt_aggregated_deps.*',
+            '*.Hilt_*',
+            '*.*_MembersInjector*',
+    ]
+}

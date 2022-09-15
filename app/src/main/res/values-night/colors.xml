@@ -1,0 +1,14 @@
+<resources>
+    <color name="background">#1A191E</color>
+
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="primaryLightColor">#121212</color>
+    <color name="onSecondary">#000000</color>
+    <color name="onBackground">#FFFFFF</color>
+
+    <color name="statusBarColor">#1A191E</color>
+    <color name="actionBarColor">#1A191E</color>
+
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#000000</color>
+</resources>

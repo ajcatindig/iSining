@@ -1,0 +1,4 @@
+<resources>
+    <!-- Base application theme. -->
+    <bool name="lightNavEnabled">false</bool>
+</resources>

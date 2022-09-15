@@ -1,0 +1,97 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    compileSdkVersion ProjectConfig.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion ProjectConfig.minSdkVersion
+        targetSdkVersion ProjectConfig.targetSdkVersion
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            useJUnitPlatform()
+            reports {
+                junitXml.enabled = true
+                html.enabled = true
+            }
+            if (name == "testDebugUnitTest") {
+                kover {
+                    disabled = false
+                    binaryReportFile.set(file("$buildDir/test/test-debug-report.bin"))
+                }
+            }
+        }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+
+    // Core Module
+    implementation project(":core")
+
+    // Repository Module
+    api project(":repository")
+
+    // Android
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
+    implementation "androidx.legacy:legacy-support-v4:$legacySupportVersion"
+    implementation "androidx.core:core-splashscreen:$splashScreenVersion"
+
+    // Material Design
+    implementation "com.google.android.material:material:$materialDesignVersion"
+
+    // Lifecycle
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    api "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:$workmanagerVersion"
+    implementation "androidx.work:work-multiprocess:$workmanagerVersion"
+
+    // Jetpack DataStore
+    implementation "androidx.datastore:datastore-preferences:$dataStoreVersion"
+
+    // JetPack Security
+    implementation "androidx.security:security-crypto:$securityCryptoVersion"
+
+    // Hilt + JetPack
+    api "androidx.hilt:hilt-work:$jetpackHiltVersion"
+    kapt "androidx.hilt:hilt-compiler:$jetpackHiltVersion"
+
+    // Dagger + Hilt
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$daggerHiltVersion"
+
+    // Testing
+    testImplementation "junit:junit:$jUnitVersion"
+    testImplementation "io.kotest:kotest-runner-junit5:$kotestVersion"
+    testImplementation "io.kotest:kotest-assertions-core:$kotestVersion"
+    testImplementation "io.kotest:kotest-property:$kotestVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+}

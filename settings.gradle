@@ -1,0 +1,8 @@
+rootProject.name = "iSining"
+
+include ':core'
+include ':data:remote'
+include ':repository'
+
+include ':app'
+include ':app:composeapp'
