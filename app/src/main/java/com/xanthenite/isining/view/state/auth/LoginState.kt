@@ -1,4 +1,6 @@
-package com.xanthenite.isining.view.state
+package com.xanthenite.isining.view.state.auth
+
+import com.xanthenite.isining.view.state.State
 
 data class LoginState(
         val isLoading: Boolean = false,

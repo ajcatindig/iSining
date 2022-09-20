@@ -7,59 +7,54 @@ import androidx.compose.runtime.getValue
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.xanthenite.isining.composeapp.component.ConnectivityStatus
-import com.xanthenite.isining.composeapp.component.action.ArScanAction
 import com.xanthenite.isining.composeapp.component.action.ThemeSwitchAction
-import com.xanthenite.isining.composeapp.component.scaffold.main.HomeTopBar
 import com.xanthenite.isining.composeapp.component.scaffold.ISiningScaffold
+import com.xanthenite.isining.composeapp.component.scaffold.main.ArtistTopBar
 import com.xanthenite.isining.composeapp.utils.collectState
-import com.xanthenite.isining.view.viewmodel.main.HomeViewModel
+import com.xanthenite.isining.view.viewmodel.main.ArtistViewModel
 
 @Composable
-fun HomeScreen(viewModel : HomeViewModel ,
-               onNavigateToAr : () -> Unit)
+fun ArtistScreen(viewModel : ArtistViewModel)
 {
     val state by viewModel.collectState()
 
     val isInDarkMode = isSystemInDarkTheme()
 
-    HomeContent(
-        isLoading = state.isLoading ,
-        isConnectivityAvailable = state.isConnectivityAvailable,
-        onRefresh = { /*TODO*/ } ,
-        onToggleTheme = { viewModel.setDarkMode(!isInDarkMode) },
-        onClickScanner = onNavigateToAr)
-
+    ArtistContent(
+            isLoading = state.isLoading ,
+            isConnectivityAvailable = state.isConnectivityAvailable,
+            onRefresh = { /*TODO*/ },
+            onToggleTheme = { viewModel.setDarkMode(!isInDarkMode) })
 }
 
 @Composable
-fun HomeContent(
-    isLoading : Boolean,
-    isConnectivityAvailable : Boolean?,
-    error : String? = null,
-    onRefresh : () -> Unit,
-    onToggleTheme : () -> Unit,
-    onClickScanner : () -> Unit)
+fun ArtistContent(
+        isLoading : Boolean,
+        isConnectivityAvailable : Boolean?,
+        error : String? = null,
+        onRefresh : () -> Unit,
+        onToggleTheme : () -> Unit)
 {
     ISiningScaffold(
         error = error,
         topAppBar = {
-            HomeTopBar(
+            ArtistTopBar(
                 actions = {
-                    ArScanAction(onClickScanner)
                     ThemeSwitchAction(onToggleTheme)
                 })
-        },
+            },
         content = {
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isLoading) ,
                 onRefresh = onRefresh ,
                 swipeEnabled = isConnectivityAvailable == true)
-        {
-            Column {
-                if (isConnectivityAvailable != null) {
-                    ConnectivityStatus(isConnectivityAvailable)
+            {
+                Column {
+                    if (isConnectivityAvailable != null) {
+                        ConnectivityStatus(isConnectivityAvailable)
+                    }
                 }
             }
         }
-    })
+    )
 }

@@ -48,7 +48,7 @@ fun BottomBar(navController : NavHostController) {
     if (bottomBarDestination) {
         BottomNavigation(backgroundColor = MaterialTheme.colors.surface ,
                          contentColor = MaterialTheme.colors.onPrimary,
-                         elevation = 8.dp,
+                         elevation = 0.dp,
                          modifier = Modifier
                                  .fillMaxWidth()
                                  .height(bottomBarHeight)) {

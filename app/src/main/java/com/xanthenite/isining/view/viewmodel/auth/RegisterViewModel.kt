@@ -1,18 +1,17 @@
-package com.xanthenite.isining.view.viewmodel
+package com.xanthenite.isining.view.viewmodel.auth
 
 import androidx.lifecycle.viewModelScope
 import com.xanthenite.isining.core.repository.AuthRepository
-import com.xanthenite.isining.core.session.SessionManager
 import com.xanthenite.isining.utils.validator.AuthValidator
-import com.xanthenite.isining.view.state.RegisterState
+import com.xanthenite.isining.view.state.auth.RegisterState
+import com.xanthenite.isining.view.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-        private val registerRepository : AuthRepository,
-        private val sessionManager : SessionManager)
+        private val registerRepository : AuthRepository)
         : BaseViewModel<RegisterState>(initialState = RegisterState())
 {
         fun setUsername(username : String) {
@@ -38,12 +37,31 @@ class RegisterViewModel @Inject constructor(
                         val username = currentState.username
                         val email = currentState.email
                         val password = currentState.password
+                        val password_confirmation = currentState.confirmPassword
 
                         setState { state -> state.copy(isLoading = true) }
 
-                        val response = registerRepository.addUser(username, email, password)
+                        val response = registerRepository.addUser(username, email, password, password_confirmation)
 
-                        /*TODO: Implement Register */
+                        response.onSuccess { message ->
+                                setState { state ->
+                                        state.copy(
+                                                isLoading = false,
+                                                isSuccess = message.message,
+                                                error = null,
+                                                email = "",
+                                                username = "",
+                                                password = "",
+                                                confirmPassword = "")
+                                }
+                        }.onFailure {
+                                setState { state ->
+                                        state.copy(
+                                                isLoading = false,
+                                                isSuccess = null,
+                                                error = "The email provided is already taken")
+                                }
+                        }
                 }
         }
 

@@ -33,15 +33,17 @@ import androidx.compose.ui.unit.sp
 import com.xanthenite.isining.composeapp.R
 import com.xanthenite.isining.composeapp.component.dialog.FailureDialog
 import com.xanthenite.isining.composeapp.component.dialog.LoaderDialog
+import com.xanthenite.isining.composeapp.component.dialog.SuccessDialog
 import com.xanthenite.isining.composeapp.ui.theme.typography
 import com.xanthenite.isining.composeapp.utils.ISiningPreview
 import com.xanthenite.isining.composeapp.utils.collectState
-import com.xanthenite.isining.view.viewmodel.RegisterViewModel
+import com.xanthenite.isining.view.viewmodel.auth.RegisterViewModel
 
 @Composable
 fun RegisterScreen(
         onNavigateUp : () -> Unit,
-        viewModel : RegisterViewModel)
+        viewModel : RegisterViewModel
+                  )
 {
     val state by viewModel.collectState()
 
@@ -57,10 +59,11 @@ fun RegisterScreen(
             onConfirmPasswordChanged =  viewModel::setConfirmPassword,
             isValidConfirmPassword =  state.isValidConfirmPassword ?: true,
             onNavigateUp = onNavigateUp ,
-            onSignUpClick = { /*TODO*/ } ,
+            onSignUpClick = viewModel::register ,
             isValidUserName =  state.isValidUsername ?: true,
             isValidPassword =  state.isValidPassword ?: true,
             isValidEmail =  state.isValidEmail ?: true,
+            isSuccess = state.isSuccess,
             error = state.error)
 }
 
@@ -81,6 +84,7 @@ fun RegisterContent(
         isValidUserName : Boolean ,
         isValidPassword : Boolean ,
         isValidEmail : Boolean ,
+        isSuccess : String?,
         error : String?)
 {
     if (isLoading) {
@@ -89,6 +93,10 @@ fun RegisterContent(
 
     if (error != null) {
         FailureDialog(error)
+    }
+
+    if (isSuccess != null) {
+        SuccessDialog(isSuccess)
     }
 
     Column(modifier = Modifier
@@ -316,7 +324,8 @@ fun PreviewRegisterContent() = ISiningPreview {
             isValidUserName = false ,
             isValidPassword =  false,
             isValidEmail =  false,
-            error = null)
+            error = null,
+            isSuccess = null)
 }
 
 

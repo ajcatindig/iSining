@@ -1,14 +1,13 @@
-package com.xanthenite.isining.view.viewmodel
+package com.xanthenite.isining.view.viewmodel.auth
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.xanthenite.isining.core.repository.AuthRepository
 import com.xanthenite.isining.core.session.SessionManager
-import com.xanthenite.isining.view.state.LoginState
+import com.xanthenite.isining.view.state.auth.LoginState
+import com.xanthenite.isining.view.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(

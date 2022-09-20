@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.xanthenite.isining.R
@@ -51,8 +52,10 @@ fun FailureDialog(failureMessage : String, onDismissed: () -> Unit = {})
                     Text(
                         text = failureMessage,
                         color = MaterialTheme.colors.onSurface,
-                        style = MaterialTheme.typography.subtitle1,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.subtitle2,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     Button(onClick = { isDismissed.value = true },
                            modifier = Modifier
@@ -68,3 +71,43 @@ fun FailureDialog(failureMessage : String, onDismissed: () -> Unit = {})
     }
 }
 
+
+@Composable
+fun SuccessDialog(successMessage : String,
+                  onDismissed: () -> Unit = {})
+{
+    val isDismissed = remember { mutableStateOf(false) }
+
+    if (!isDismissed.value) {
+        Dialog(onDismissRequest = { })
+        {
+            Surface{
+                Column(horizontalAlignment = Alignment.CenterHorizontally)
+                {
+                    LottieAnimation(
+                            resId = R.raw.success,
+                            modifier = Modifier
+                                    .padding(16.dp)
+                                    .size(84.dp)
+                                   )
+                    Text(
+                            text = successMessage,
+                            color = MaterialTheme.colors.onSurface,
+                            style = MaterialTheme.typography.subtitle1,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                    Button(onClick = { isDismissed.value = true },
+                           modifier = Modifier
+                                   .fillMaxWidth()
+                                   .height(80.dp)
+                                   .padding(16.dp))
+                    {
+                        Text(style = typography.subtitle1, color = Color.White, text = "OK")
+                    }
+                }
+            }
+        }
+    }
+}

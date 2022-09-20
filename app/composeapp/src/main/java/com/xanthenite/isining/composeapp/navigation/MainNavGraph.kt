@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.xanthenite.isining.composeapp.component.bottombar.BottomBarHomeItem
-import com.xanthenite.isining.composeapp.ui.screens.home.HomeScreen
+import com.xanthenite.isining.composeapp.ui.screens.home.*
 
 @Composable
 fun MainNavGraph(navController : NavHostController)
@@ -15,22 +15,31 @@ fun MainNavGraph(navController : NavHostController)
     NavHost(navController = navController ,
             route = Graph.HOME,
             startDestination = BottomBarHomeItem.Home.route) {
+
         composable(route = BottomBarHomeItem.Home.route)
         {
             HomeScreen(
                     viewModel = hiltViewModel(),
-                    onNavigateToLogin = { navController.popBackStack()
-                                          navController.navigate(Graph.AUTHENTICATION)})
+                    onNavigateToAr = {})
         }
+
+        composable(route = BottomBarHomeItem.Exhibits.route) {
+            ExhibitScreen(viewModel = hiltViewModel())
+        }
+
+        composable(route = BottomBarHomeItem.Artworks.route) {
+            ArtworkScreen(viewModel = hiltViewModel())
+        }
+
+        composable(route = BottomBarHomeItem.Artists.route) {
+            ArtistScreen(viewModel = hiltViewModel())
+        }
+
+        composable(route = BottomBarHomeItem.Profile.route) {
+            ProfileScreen()
+        }
+
         authNavGraph(navController)
+
     }
 }
-
-///**
-// * Clears backstack including current screen and navigates to Login Screen
-// */
-//fun NavController.popAllAndNavigateToLogin() = navigate(AuthScreen.Login.route) {
-//    launchSingleTop = true
-//    popUpTo(Graph.AUTHENTICATION)
-//}
-

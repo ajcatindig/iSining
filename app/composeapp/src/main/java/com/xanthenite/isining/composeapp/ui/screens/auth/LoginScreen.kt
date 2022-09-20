@@ -36,15 +36,15 @@ import com.xanthenite.isining.composeapp.component.dialog.FailureDialog
 import com.xanthenite.isining.composeapp.component.dialog.LoaderDialog
 import com.xanthenite.isining.composeapp.utils.ISiningPreview
 import com.xanthenite.isining.composeapp.utils.collectState
-import com.xanthenite.isining.view.viewmodel.LoginViewModel
+import com.xanthenite.isining.view.viewmodel.auth.LoginViewModel
 
 @Composable
 fun LoginScreen(
-        viewModel : LoginViewModel,
-        onNavigateToSignUp : () -> Unit,
-        onNavigateToForgot : () -> Unit,
+        viewModel : LoginViewModel ,
+        onNavigateToSignUp : () -> Unit ,
+        onNavigateToForgot : () -> Unit ,
         onNavigateToHome : () -> Unit
-               )
+)
 {
     val state by viewModel.collectState()
 

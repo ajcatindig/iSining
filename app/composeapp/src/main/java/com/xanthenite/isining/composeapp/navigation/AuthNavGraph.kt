@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.xanthenite.isining.composeapp.ui.screens.auth.ForgotScreen
 import com.xanthenite.isining.composeapp.ui.screens.auth.LoginScreen
 import com.xanthenite.isining.composeapp.ui.screens.auth.RegisterScreen
 
@@ -18,12 +19,16 @@ fun NavGraphBuilder.authNavGraph(navController : NavHostController)
                     onNavigateToSignUp = { navController.navigate(AuthScreen.SignUp.route) },
                     onNavigateToHome = { navController.popBackStack()
                                          navController.navigate(Graph.HOME)},
-                    onNavigateToForgot = {})
+                    onNavigateToForgot = {navController.navigate(AuthScreen.Forgot.route)})
         }
         composable(route = AuthScreen.SignUp.route) {
             RegisterScreen(
                     onNavigateUp = { navController.navigateUp()} ,
                     viewModel = hiltViewModel())
+        }
+        composable(route = AuthScreen.Forgot.route) {
+            ForgotScreen(onNavigateUp = { navController.navigateUp()} ,
+                         viewModel = hiltViewModel())
         }
     }
 }
