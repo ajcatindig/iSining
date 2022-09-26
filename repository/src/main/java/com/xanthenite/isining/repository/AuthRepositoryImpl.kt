@@ -20,24 +20,37 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepositoryImpl @Inject internal constructor(
         private val authService : AuthService
-        ) : AuthRepository
+) : AuthRepository
 {
+
+    //register
     override suspend fun addUser(
-            username : String , email : String , password : String, password_confirmation : String) : Either<RegisterResult>
+            username : String ,
+            email : String ,
+            password : String,
+            password_confirmation : String)
+    : Either<RegisterResult>
     {
+
         return runCatching {
-            val registerResponse = authService.register(RegisterRequest(username, email, password, password_confirmation)).getResponse()
+            val registerResponse = authService.register(
+                    RegisterRequest(username, email, password, password_confirmation)).getResponse()
 
             when(registerResponse.state) {
                 State.SUCCESS -> Either.success(RegisterResult(registerResponse.message.toString()))
                 else -> Either.error(registerResponse.message!!)
             }
         }.getOrDefault(Either.error("Something went wrong!"))
+
     }
 
+    //login
     override suspend fun getUserByEmailAndPassword(
-            email : String , password : String) : Either<AuthCredential>
+            email : String ,
+            password : String)
+    : Either<AuthCredential>
     {
+
         return runCatching {
             val authResponse = authService.login(LoginRequest(email, password)).getResponse()
 
@@ -46,8 +59,10 @@ class AuthRepositoryImpl @Inject internal constructor(
                 else -> Either.error(authResponse.message!!)
             }
         }.getOrDefault(Either.error("Something went wrong!"))
+
     }
 
+    //forgot password
     override suspend fun forgotPassword(email : String) : Either<ForgotResult>
     {
         return runCatching {
@@ -59,4 +74,5 @@ class AuthRepositoryImpl @Inject internal constructor(
             }
         }.getOrDefault(Either.error("Something went wrong!"))
     }
+
 }

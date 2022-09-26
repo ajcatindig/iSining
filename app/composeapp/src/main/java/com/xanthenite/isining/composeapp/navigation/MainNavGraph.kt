@@ -24,7 +24,8 @@ fun MainNavGraph(navController : NavHostController)
         }
 
         composable(route = BottomBarHomeItem.Exhibits.route) {
-            ExhibitScreen(viewModel = hiltViewModel())
+            ExhibitScreen(viewModel = hiltViewModel(),
+                          onNavigateToExhibitDetail = {/*TODO*/})
         }
 
         composable(route = BottomBarHomeItem.Artworks.route) {
@@ -36,7 +37,9 @@ fun MainNavGraph(navController : NavHostController)
         }
 
         composable(route = BottomBarHomeItem.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(viewModel = hiltViewModel(),
+                          onNavigateToLogin = { navController.popBackStack()
+                                                navController.navigate(Graph.AUTHENTICATION)})
         }
 
         authNavGraph(navController)

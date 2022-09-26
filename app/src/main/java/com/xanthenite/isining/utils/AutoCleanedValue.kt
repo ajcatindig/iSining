@@ -16,7 +16,7 @@ class AutoCleanedValue<T : Any>(
         fragment: Fragment,
         private val initializer: (() -> T)?,
         beforeCleaning: (T?) -> Unit
-                               ) : ReadWriteProperty<Fragment , T>
+) : ReadWriteProperty<Fragment , T>
 {
 
     private var _value: T? = null

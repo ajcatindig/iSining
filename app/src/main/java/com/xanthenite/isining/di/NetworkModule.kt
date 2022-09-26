@@ -3,6 +3,7 @@ package com.xanthenite.isining.di
 import com.xanthenite.isining.core.utils.moshi
 import com.xanthenite.isining.data.remote.Constant
 import com.xanthenite.isining.data.remote.api.AuthService
+import com.xanthenite.isining.data.remote.api.ExhibitService
 import com.xanthenite.isining.data.remote.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
@@ -34,5 +35,13 @@ class NetworkModule
             .client(okHttpClientBuilder.build())
             .build()
             .create(AuthService::class.java)
+    }
+
+    @Provides
+    fun provideExhibitService(authInterceptor : AuthInterceptor) : ExhibitService {
+        return baseRetrofitBuilder
+            .client(okHttpClientBuilder.addInterceptor(authInterceptor).build())
+            .build()
+            .create(ExhibitService::class.java)
     }
 }
