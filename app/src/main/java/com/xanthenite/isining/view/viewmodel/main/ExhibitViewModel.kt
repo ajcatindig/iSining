@@ -39,7 +39,7 @@ class ExhibitViewModel @Inject constructor(
                 .launchIn(viewModelScope)
     }
 
-    private fun getAllExhibits() {
+    fun getAllExhibits() {
         exhibitRepository.getAllExhibits()
             .distinctUntilChanged()
             .onEach { response ->

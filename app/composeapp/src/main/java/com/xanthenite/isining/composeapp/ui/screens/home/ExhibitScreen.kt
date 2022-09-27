@@ -29,7 +29,7 @@ fun ExhibitScreen(
     ExhibitContent(
         isLoading = state.isLoading ,
         isConnectivityAvailable = state.isConnectivityAvailable,
-        onRefresh = { /*TODO*/ },
+        onRefresh = viewModel::getAllExhibits,
         onToggleTheme = { viewModel.setDarkMode(!isInDarkMode) },
         data = state.data,
         onNavigateToExhibitDetail = onNavigateToExhibitDetail)

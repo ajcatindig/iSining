@@ -30,22 +30,24 @@ fun ExhibitCard(
         onExhibitClick : () -> Unit)
 {
     Card(
-       shape = RoundedCornerShape(15.dp),
+       shape = RoundedCornerShape(10.dp),
        backgroundColor = MaterialTheme.colors.surface,
        modifier = Modifier
                .padding(horizontal = 16.dp , vertical = 8.dp)
                .fillMaxWidth()
                .wrapContentHeight()
                .clickable { onExhibitClick() },
-       elevation = 0.dp)
+       elevation = 2.dp)
     {
-        Row(modifier = Modifier.padding(16.dp))
+        Row(modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start)
         {
             GlideImage(
                 imageModel = imageUrl,
                 modifier = Modifier
                         .size(130.dp)
-                        .clip(RoundedCornerShape(15.dp)),
+                        .clip(RoundedCornerShape(10.dp)),
                 loading = {
                     Box(modifier = Modifier.matchParentSize()) {
                         CircularProgressIndicator(
@@ -53,40 +55,41 @@ fun ExhibitCard(
                                 .align(Alignment.Center),
                             color = MaterialTheme.colors.onPrimary)
                     }
-                }, // shows an error text message when request failed.
-                failure = { LottieAnimation(resId = R.raw.error_404,
-                                            modifier = Modifier
-                                                    .matchParentSize()
-                                                    .align(Alignment.Center)) }
-//                placeHolder = painterResource(id = R.drawable.app_logo),
-//                error = painterResource(id = R.drawable.app_logo)
+                },
+                failure = {
+                    LottieAnimation(
+                        resId = R.raw.error_404,
+                        modifier = Modifier
+                            .matchParentSize()
+                            .align(Alignment.Center)
+                    )
+                }
             )
             Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                   verticalArrangement = Arrangement.Center)
+                   verticalArrangement = Arrangement.Center,
+                   horizontalAlignment = Alignment.Start)
             {
                 Text(text = title,
                      maxLines = 2,
                      overflow = TextOverflow.Ellipsis,
                      style = MaterialTheme.typography.h5,
-                     fontSize = 24.sp)
+                     fontSize = 20.sp)
                 Row(modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight()
                         .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween)
+                    horizontalArrangement = Arrangement.Start)
                 {
                     Text(text = "Start Date: $startDate",
-                         style = MaterialTheme.typography.caption,
+                         style = MaterialTheme.typography.subtitle2,
                          fontSize = 14.sp)
                 }
                 Row(modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight()
                         .padding(vertical = 2.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween)
+                    horizontalArrangement = Arrangement.Start)
                 {
                     Text(text = "End Date: $endDate",
-                         style = MaterialTheme.typography.caption,
+                         style = MaterialTheme.typography.subtitle2,
                          fontSize = 14.sp)
                 }
             }
@@ -97,9 +100,10 @@ fun ExhibitCard(
 @Preview(showBackground = true)
 @Composable
 fun PreviewExhibitCard() = ISiningPreview {
-    ExhibitCard(imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Johnrogershousemay2020.webp/1200px-Johnrogershousemay2020.webp.png",
-                title = "Lorem Ipsum" ,
-                startDate = "09-09-2022",
-                endDate = "09-10-2022",
-                onExhibitClick = {})
+    ExhibitCard(
+        imageUrl = "https://i.scdn.co/image/ab67616d0000b273bef9b0a348ea8dd18a581025",
+        title = "Seven Inches of Satanic Panic",
+        startDate = "09-09-2022",
+        endDate = "09-10-2022",
+        onExhibitClick = {})
 }

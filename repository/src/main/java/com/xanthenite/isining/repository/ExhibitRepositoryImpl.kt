@@ -34,6 +34,8 @@ class ExhibitRepositoryImpl @Inject internal constructor(
             else -> Either.error(exhibitsResponse.message!!)
         }
         emit(state)
-        Log.e("Data", "${exhibitsResponse.data}")
-     }.catch { emit(Either.error("An unknown error occurred")) }
+        Log.d("Data", "${exhibitsResponse.data}")
+     }.catch {
+        Log.e("ExhibitRepositoryImpl", "catch ${it.message!!}")
+        emit(Either.error("An unknown error occurred")) }
 }

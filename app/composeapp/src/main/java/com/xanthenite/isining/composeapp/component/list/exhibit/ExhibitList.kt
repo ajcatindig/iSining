@@ -27,7 +27,7 @@ fun ExhibitList(data : List<Exhibit>, onClick : (Exhibit) -> Unit)
                 endDate = index.end_date,
                 onExhibitClick = { onClick(index) })
             },
-            key = { Exhibit(it.id, it.title, it.description, it.cover_path, it.start_date, it.end_date) }
+            key = { Triple(it.id, it.title, it.description)}
         )
     }
 }
