@@ -12,15 +12,17 @@ import com.xanthenite.isining.composeapp.ui.screens.home.*
 @Composable
 fun MainNavGraph(navController : NavHostController)
 {
-    NavHost(navController = navController ,
-            route = Graph.HOME,
-            startDestination = BottomBarHomeItem.Home.route) {
+    NavHost(
+        navController = navController ,
+        route = Graph.HOME,
+        startDestination = BottomBarHomeItem.Home.route) {
 
         composable(route = BottomBarHomeItem.Home.route)
         {
             HomeScreen(
-                    viewModel = hiltViewModel(),
-                    onNavigateToAr = {})
+                viewModel = hiltViewModel(),
+                onNavigateToAr = {}
+            )
         }
 
         composable(route = BottomBarHomeItem.Exhibits.route) {
@@ -31,7 +33,10 @@ fun MainNavGraph(navController : NavHostController)
         }
 
         composable(route = BottomBarHomeItem.Artworks.route) {
-            ArtworkScreen(viewModel = hiltViewModel())
+            ArtworkScreen(
+                viewModel = hiltViewModel(),
+                onNavigateToArtworkDetail = {/*TODO*/}
+            )
         }
 
         composable(route = BottomBarHomeItem.Artists.route) {

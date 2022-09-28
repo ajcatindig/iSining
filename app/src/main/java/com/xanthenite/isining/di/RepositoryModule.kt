@@ -1,7 +1,9 @@
 package com.xanthenite.isining.di
 
+import com.xanthenite.isining.core.repository.ArtworkRepository
 import com.xanthenite.isining.core.repository.AuthRepository
 import com.xanthenite.isining.core.repository.ExhibitRepository
+import com.xanthenite.isining.repository.ArtworkRepositoryImpl
 import com.xanthenite.isining.repository.AuthRepositoryImpl
 import com.xanthenite.isining.repository.ExhibitRepositoryImpl
 import dagger.Binds
@@ -21,6 +23,10 @@ interface RepositoryModule
     @Binds
     @RemoteRepository
     fun iSiningExhibitRepository(iSiningExhibitRepository : ExhibitRepositoryImpl) : ExhibitRepository
+
+    @Binds
+    @RemoteRepository
+    fun iSiningArtworkRepository(iSiningArtworkRepository : ArtworkRepositoryImpl) : ArtworkRepository
 
 }
 
