@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,7 @@ import com.xanthenite.isining.composeapp.utils.ISiningPreview
 
 @Composable
 fun ExhibitCard(
-        imageUrl : String,
+        imageUrl : String?,
         title : String,
         startDate : String,
         endDate : String,
@@ -33,21 +34,20 @@ fun ExhibitCard(
        shape = RoundedCornerShape(10.dp),
        backgroundColor = MaterialTheme.colors.surface,
        modifier = Modifier
-               .padding(horizontal = 16.dp , vertical = 8.dp)
+               .padding(horizontal = 16.dp , vertical = 4.dp)
                .fillMaxWidth()
                .wrapContentHeight()
                .clickable { onExhibitClick() },
        elevation = 2.dp)
     {
-        Row(modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start)
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(0.dp))
         {
             GlideImage(
                 imageModel = imageUrl,
                 modifier = Modifier
-                        .size(130.dp)
-                        .clip(RoundedCornerShape(10.dp)),
+                        .size(140.dp)
+                        .clip(RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp)),
                 loading = {
                     Box(modifier = Modifier.matchParentSize()) {
                         CircularProgressIndicator(
@@ -79,18 +79,20 @@ fun ExhibitCard(
                         .padding(vertical = 8.dp),
                     horizontalArrangement = Arrangement.Start)
                 {
-                    Text(text = "Start Date: $startDate",
+                    Text(text = "From: $startDate",
                          style = MaterialTheme.typography.subtitle2,
-                         fontSize = 14.sp)
+                         fontSize = 14.sp,
+                         fontStyle = FontStyle.Italic)
                 }
                 Row(modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 2.dp),
                     horizontalArrangement = Arrangement.Start)
                 {
-                    Text(text = "End Date: $endDate",
+                    Text(text = "Until: $endDate",
                          style = MaterialTheme.typography.subtitle2,
-                         fontSize = 14.sp)
+                         fontSize = 14.sp,
+                         fontStyle = FontStyle.Italic)
                 }
             }
         }

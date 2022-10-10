@@ -10,15 +10,23 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.xanthenite.isining.composeapp.component.ConnectivityStatus
 import com.xanthenite.isining.composeapp.component.action.ThemeSwitchAction
+import com.xanthenite.isining.composeapp.component.cards.profile.ProfileCard
 import com.xanthenite.isining.composeapp.component.dialog.ConfirmationDialog
 import com.xanthenite.isining.composeapp.component.scaffold.ISiningScaffold
 import com.xanthenite.isining.composeapp.component.scaffold.main.ExhibitTopBar
 import com.xanthenite.isining.composeapp.component.scaffold.main.ProfileTopBar
 import com.xanthenite.isining.composeapp.utils.collectState
+import com.xanthenite.isining.core.model.User
 import com.xanthenite.isining.view.viewmodel.main.ProfileViewModel
 
 @Composable
-fun ProfileScreen(viewModel : ProfileViewModel, onNavigateToLogin : () -> Unit)
+fun ProfileScreen(
+    viewModel : ProfileViewModel,
+    onNavigateToLogin : () -> Unit,
+    onChangePasswordClick : () -> Unit,
+    onAboutAppCLick : () -> Unit,
+    onManageProfileClick : () -> Unit,
+    onTransactionClick : () -> Unit)
 {
 
     val state by viewModel.collectState()
@@ -30,9 +38,14 @@ fun ProfileScreen(viewModel : ProfileViewModel, onNavigateToLogin : () -> Unit)
     ProfileContent(
         isLoading = state.isLoading ,
         isConnectivityAvailable = state.isConnectivityAvailable,
-        onRefresh = { /*TODO*/ },
+        onRefresh = viewModel::getCurrentUser,
         onToggleTheme = { viewModel.setDarkMode(!isInDarkMode) },
-        onLogoutClick = { showLogoutConfirmation = true })
+        onLogoutClick = { showLogoutConfirmation = true },
+        data = state.data,
+        onChangePasswordClick = onChangePasswordClick,
+        onAboutAppCLick = onAboutAppCLick,
+        onManageProfileClick = onManageProfileClick,
+        onTransactionClick = onTransactionClick)
 
     LogoutConfirmation(
             show = showLogoutConfirmation,
@@ -52,10 +65,15 @@ fun ProfileScreen(viewModel : ProfileViewModel, onNavigateToLogin : () -> Unit)
 fun ProfileContent(
         isLoading : Boolean,
         isConnectivityAvailable : Boolean?,
+        data : User,
         error : String? = null,
         onRefresh : () -> Unit,
         onToggleTheme : () -> Unit,
-        onLogoutClick : () -> Unit)
+        onLogoutClick : () -> Unit,
+        onChangePasswordClick : () -> Unit,
+        onAboutAppCLick : () -> Unit,
+        onManageProfileClick : () -> Unit,
+        onTransactionClick : () -> Unit)
 {
     ISiningScaffold(
         error = error,
@@ -75,9 +93,13 @@ fun ProfileContent(
                     if (isConnectivityAvailable != null) {
                         ConnectivityStatus(isConnectivityAvailable)
                     }
-                    Button(onClick = { onLogoutClick() }) {
-                        Text(text = "Logout")
-                    }
+                    ProfileCard(
+                            data = data,
+                            onLogoutClick = { onLogoutClick() } ,
+                            onChangePasswordClick = { onChangePasswordClick() } ,
+                            onAboutAppClick = { onAboutAppCLick() } ,
+                            onTransactionClick = { onTransactionClick() },
+                            onManageProfileClick = { onManageProfileClick() })
                 }
             }
         }
@@ -89,7 +111,7 @@ fun LogoutConfirmation(show: Boolean, onConfirm: () -> Unit, onDismiss: () -> Un
     if (show) {
         ConfirmationDialog(
                 title = "Logout?",
-                message = "Sure want to logout?",
+                message = "Are you sure you want to logout?",
                 onConfirmedYes = onConfirm,
                 onConfirmedNo = onDismiss,
                 onDismissed = onDismiss)

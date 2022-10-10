@@ -13,5 +13,5 @@ data class ExhibitsResponse(
 data class ExhibitResponse(
         override val state : State ,
         override val message : String?,
-        val id : Int
+        val data : Exhibit
 ) : BaseResponse

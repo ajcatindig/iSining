@@ -21,9 +21,18 @@ class ExhibitRepositoryImpl @Inject internal constructor(
     private val exhibitService : ExhibitService
 ) : ExhibitRepository
 {
-    override fun getExhibitById(id : Int) : Flow<Exhibit>
-    {
-        TODO("Not yet implemented")
+    override fun getExhibitById(id : Int) : Flow<Either<Exhibit>> = flow {
+        val exhibitResponse = exhibitService.getExhibitById(id).getResponse()
+
+        val state = when(exhibitResponse.state) {
+            State.SUCCESS -> Either.success(exhibitResponse.data)
+            else -> Either.error(exhibitResponse.message!!)
+        }
+        emit(state)
+        Log.d("Data", "${exhibitResponse.data}")
+    }.catch {
+        Log.e("ExhibitRepositoryImpl", "catch ${it.message!!}")
+        emit(Either.error("An unknown error occurred"))
     }
 
     override fun getAllExhibits() : Flow<Either<List<Exhibit>>> = flow {

@@ -28,19 +28,22 @@ fun MainNavGraph(navController : NavHostController)
         composable(route = BottomBarHomeItem.Exhibits.route) {
             ExhibitScreen(
                 viewModel = hiltViewModel(),
-                onNavigateToExhibitDetail = {/*TODO*/}
+                onNavigateToExhibitDetail = {/*TODO:Implement navigation to exhibit detail screen*/}
             )
         }
 
         composable(route = BottomBarHomeItem.Artworks.route) {
             ArtworkScreen(
                 viewModel = hiltViewModel(),
-                onNavigateToArtworkDetail = {/*TODO*/}
+                onNavigateToArtworkDetail = {/*TODO:Implement navigation to artwork detail screen*/}
             )
         }
 
         composable(route = BottomBarHomeItem.Artists.route) {
-            ArtistScreen(viewModel = hiltViewModel())
+            ArtistScreen(
+                viewModel = hiltViewModel(),
+                onNavigateToArtistDetail = {/*TODO:Implement navigation to artist detail screen*/}
+            )
         }
 
         composable(route = BottomBarHomeItem.Profile.route) {
@@ -49,7 +52,11 @@ fun MainNavGraph(navController : NavHostController)
                 onNavigateToLogin = {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
-                }
+                },
+                onAboutAppCLick = {},
+                onTransactionClick = {},
+                onManageProfileClick = {},
+                onChangePasswordClick = {}
             )
         }
 

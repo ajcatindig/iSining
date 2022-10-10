@@ -15,7 +15,7 @@ interface ExhibitRepository
      *
      * @param exhibitId An exhibit ID.
      */
-    fun getExhibitById(id : Int) : Flow<Exhibit>
+    fun getExhibitById(id : Int) : Flow<Either<Exhibit>>
 
     /**
      * Returns all exhibits.

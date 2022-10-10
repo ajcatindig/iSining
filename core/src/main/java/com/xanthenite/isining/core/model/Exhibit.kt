@@ -6,4 +6,5 @@ data class Exhibit(
     val description : String,
     val cover_path : String,
     val start_date : String,
-    val end_date : String)
+    val end_date : String,
+    val artwork : List<Artwork>?)

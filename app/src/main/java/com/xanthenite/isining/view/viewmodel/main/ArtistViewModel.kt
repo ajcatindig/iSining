@@ -4,24 +4,25 @@ import androidx.lifecycle.viewModelScope
 import com.xanthenite.isining.core.connectivity.ConnectionState
 import com.xanthenite.isining.core.connectivity.ConnectivityObserver
 import com.xanthenite.isining.core.preference.PreferenceManager
+import com.xanthenite.isining.core.repository.ArtistRepository
+import com.xanthenite.isining.di.RemoteRepository
 import com.xanthenite.isining.view.state.main.ArtistState
 import com.xanthenite.isining.view.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ArtistViewModel @Inject constructor(
         private val preferenceManager : PreferenceManager ,
-        private val connectivityObserver: ConnectivityObserver
+        private val connectivityObserver: ConnectivityObserver,
+        @RemoteRepository val artistRepository : ArtistRepository
 ) : BaseViewModel<ArtistState>(initialState = ArtistState())
 {
     init {
         observeConnectivity()
+        getALlArtists()
     }
 
     fun setDarkMode(enable: Boolean) {
@@ -36,6 +37,19 @@ class ArtistViewModel @Inject constructor(
                 .map { it === ConnectionState.Available }
                 .onEach { setState { state -> state.copy(isConnectivityAvailable = it) } }
                 .launchIn(viewModelScope)
+    }
+
+    fun getALlArtists(){
+        artistRepository.getAllArtists()
+            .distinctUntilChanged()
+            .onEach { response ->
+                response.onSuccess { data ->
+                    setState { state -> state.copy(isLoading = false, data = data) }
+                }.onFailure { message ->
+                    setState { state -> state.copy(isLoading = false, error = message) }
+                }
+            }.onStart { setState { state -> state.copy(isLoading = true) } }
+            .launchIn(viewModelScope)
     }
 
     companion object {

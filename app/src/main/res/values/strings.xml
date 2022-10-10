@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iSining</string>
+    <string name="app_name">i-Sining</string>
 
     <!-- Action Menu -->
     <string name="menu_ui_mode">Light/Dark Mode</string>

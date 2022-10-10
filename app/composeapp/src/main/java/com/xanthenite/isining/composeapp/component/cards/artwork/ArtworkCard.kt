@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,7 @@ import com.xanthenite.isining.composeapp.R
 
 @Composable
 fun ArtworkCard(
-        imageUrl : String,
+        imageUrl : String?,
         title : String,
         artistName : String,
         onArtworkClick : () -> Unit)
@@ -35,7 +36,7 @@ fun ArtworkCard(
         modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(horizontal = 16.dp , vertical = 8.dp)
+                .padding(horizontal = 16.dp , vertical = 4.dp)
                 .clickable { onArtworkClick() },
         elevation = 2.dp)
     {
@@ -65,14 +66,14 @@ fun ArtworkCard(
             modifier = Modifier
                     .fillMaxWidth()
                     .size(200.dp)
-                    .background(MaterialTheme.colors.primary.copy(0.6f)),
+                    .background(MaterialTheme.colors.primary.copy(0.5f)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center)
         {
             Row(
                 modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 4.dp, horizontal = 16.dp)
                         .wrapContentHeight(),
                 horizontalArrangement = Arrangement.Center)
             {
@@ -80,14 +81,15 @@ fun ArtworkCard(
                     text = title,
                     style = MaterialTheme.typography.h5,
                     color = Color.White,
-                    fontSize = 28.sp,
+                    fontSize = 25.sp,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis)
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center)
             }
             Row(
                 modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 4.dp, horizontal = 16.dp)
                         .wrapContentHeight(),
                 horizontalArrangement = Arrangement.Center)
             {
@@ -95,7 +97,8 @@ fun ArtworkCard(
                     text = "by $artistName",
                     style = MaterialTheme.typography.subtitle1,
                     color = Color.White,
-                    fontSize = 18.sp)
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center)
             }
         }
     }

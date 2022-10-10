@@ -2,9 +2,7 @@ package com.xanthenite.isining.di
 
 import com.xanthenite.isining.core.utils.moshi
 import com.xanthenite.isining.data.remote.Constant
-import com.xanthenite.isining.data.remote.api.ArtworkService
-import com.xanthenite.isining.data.remote.api.AuthService
-import com.xanthenite.isining.data.remote.api.ExhibitService
+import com.xanthenite.isining.data.remote.api.*
 import com.xanthenite.isining.data.remote.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
@@ -52,5 +50,29 @@ class NetworkModule
             .client(okHttpClientBuilder.addInterceptor(authInterceptor).build())
             .build()
             .create(ArtworkService::class.java)
+    }
+
+    @Provides
+    fun provideArtistService(authInterceptor : AuthInterceptor) : ArtistService {
+        return baseRetrofitBuilder
+            .client(okHttpClientBuilder.addInterceptor(authInterceptor).build())
+            .build()
+            .create(ArtistService::class.java)
+    }
+
+    @Provides
+    fun provideUserService(authInterceptor : AuthInterceptor) : UserService {
+        return baseRetrofitBuilder
+            .client(okHttpClientBuilder.addInterceptor(authInterceptor).build())
+            .build()
+            .create(UserService::class.java)
+    }
+
+    @Provides
+    fun provideFeaturedService(authInterceptor : AuthInterceptor) : FeaturedService {
+        return baseRetrofitBuilder
+            .client(okHttpClientBuilder.addInterceptor(authInterceptor).build())
+            .build()
+            .create(FeaturedService::class.java)
     }
 }

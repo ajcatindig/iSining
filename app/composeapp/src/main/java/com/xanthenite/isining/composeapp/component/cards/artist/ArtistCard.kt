@@ -1,59 +1,86 @@
 package com.xanthenite.isining.composeapp.component.cards.artist
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.glide.GlideImage
+import com.xanthenite.isining.composeapp.ui.theme.lightBlue
+import com.xanthenite.isining.composeapp.ui.theme.offWhite
 import com.xanthenite.isining.composeapp.utils.ISiningPreview
 
 @Composable
 fun ArtistCard(
-    imageUrl : String,
+    imageUrl : String?,
     artistName : String,
-    artistEmail : String,
     onArtistClick : () -> Unit)
 {
     Card(
         shape = RoundedCornerShape(10.dp),
         backgroundColor = MaterialTheme.colors.surface,
         modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(horizontal = 16.dp , vertical = 8.dp)
+                .padding(8.dp)
                 .clickable { onArtistClick() },
         elevation = 2.dp)
     {
-        Row(modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) 
         {
             GlideImage(
-                imageModel = imageUrl,
-                modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, MaterialTheme.colors.onPrimary, CircleShape))
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start)
+                    imageModel = imageUrl,
+                    modifier = Modifier
+                            .size(145.dp)
+                            .clip(CircleShape),
+                    loading = {
+                        Box(modifier = Modifier.matchParentSize()) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .align(Alignment.Center),
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                        }
+                    },
+                    failure = {
+                        val substring = artistName.substring(0 , 1).toUpperCase()
+                        Box(modifier = Modifier
+                                .matchParentSize()
+                                .background(offWhite))
+                        {
+                            Text(
+                                    text = substring ,
+                                    modifier = Modifier.align(Alignment.Center) ,
+                                    style = MaterialTheme.typography.h3 ,
+                                    color = lightBlue
+                                )
+                        }
+                    }
+            )
+            Row(
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center) 
             {
-                Text(text = artistName, style = MaterialTheme.typography.h5)
-                Spacer(modifier = Modifier.padding(4.dp))
-                Text(text = artistEmail, style = MaterialTheme.typography.caption, fontSize = 16.sp)
+                Text(
+                    text = artistName,
+                    style = MaterialTheme.typography.h4,
+                    fontSize = 18.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis)
             }
         }
     }
@@ -63,8 +90,7 @@ fun ArtistCard(
 @Composable
 fun PreviewArtistCard() = ISiningPreview {
     ArtistCard(
-        imageUrl = "https://images.genius.com/15fc69cd7662c307f69188b951f80622.608x608x1.jpg" ,
+        imageUrl = "https://i.pinimg.com/originals/fd/af/66/fdaf668acc2e206e6ab80b2d614d28c6.jpg" ,
         artistName = "Tobias Forge",
-        artistEmail = "emeritusiv@gmail.com",
         onArtistClick = {})
 }

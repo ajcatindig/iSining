@@ -1,5 +1,6 @@
 package com.xanthenite.isining.repository
 
+import android.util.Log
 import com.xanthenite.isining.core.model.AuthCredential
 import com.xanthenite.isining.core.model.ForgotResult
 import com.xanthenite.isining.core.model.RegisterResult
@@ -41,7 +42,6 @@ class AuthRepositoryImpl @Inject internal constructor(
                 else -> Either.error(registerResponse.message!!)
             }
         }.getOrDefault(Either.error("Something went wrong!"))
-
     }
 
     //login

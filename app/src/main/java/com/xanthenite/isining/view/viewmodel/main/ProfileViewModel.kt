@@ -3,16 +3,16 @@ package com.xanthenite.isining.view.viewmodel.main
 import androidx.lifecycle.viewModelScope
 import com.xanthenite.isining.core.connectivity.ConnectionState
 import com.xanthenite.isining.core.connectivity.ConnectivityObserver
+import com.xanthenite.isining.core.model.User
 import com.xanthenite.isining.core.preference.PreferenceManager
+import com.xanthenite.isining.core.repository.UserRepository
 import com.xanthenite.isining.core.session.SessionManager
+import com.xanthenite.isining.di.RemoteRepository
 import com.xanthenite.isining.view.state.main.ExhibitState
 import com.xanthenite.isining.view.state.main.ProfileState
 import com.xanthenite.isining.view.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,12 +20,25 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
         private val preferenceManager : PreferenceManager ,
         private val connectivityObserver: ConnectivityObserver,
-        private val sessionManager : SessionManager
-) : BaseViewModel<ProfileState>(initialState = ProfileState())
+        private val sessionManager : SessionManager,
+        @RemoteRepository val userRepository : UserRepository
+) : BaseViewModel<ProfileState>(
+        initialState = ProfileState(data = User(
+                id = null,
+                name = null,
+                first_name = null,
+                last_name = null,
+                birthdate = null,
+                type = null,
+                gender = null,
+                number = null,
+                email = null,
+                profile_photo_path = null)))
 {
     init {
         observeConnectivity()
         checkUserSession()
+        getCurrentUser()
     }
 
     fun setDarkMode(enable: Boolean) {
@@ -39,6 +52,20 @@ class ProfileViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .map { it === ConnectionState.Available }
                 .onEach { setState { state -> state.copy(isConnectivityAvailable = it) } }
+                .launchIn(viewModelScope)
+    }
+
+    fun getCurrentUser()
+    {
+        userRepository.getCurrentUser()
+                .distinctUntilChanged()
+                .onEach { response ->
+                    response.onSuccess { data ->
+                        setState { state -> state.copy(isLoading = false, data = data) }
+                    }.onFailure { message ->
+                        setState { state -> state.copy(isLoading = false, error = message) }
+                    }
+                }.onStart { setState { state -> state.copy(isLoading = true) } }
                 .launchIn(viewModelScope)
     }
 

@@ -1,6 +1,7 @@
 package com.xanthenite.isining.composeapp.ui.activities
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity()
     {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE , WindowManager.LayoutParams.FLAG_SECURE)
         setContent {
             ISiningMain()
         }

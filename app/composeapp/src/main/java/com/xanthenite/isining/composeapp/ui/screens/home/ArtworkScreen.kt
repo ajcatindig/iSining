@@ -9,7 +9,6 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.xanthenite.isining.composeapp.component.ConnectivityStatus
 import com.xanthenite.isining.composeapp.component.action.ThemeSwitchAction
 import com.xanthenite.isining.composeapp.component.list.artwork.ArtworkList
-import com.xanthenite.isining.composeapp.component.list.exhibit.ExhibitList
 import com.xanthenite.isining.composeapp.component.scaffold.ISiningScaffold
 import com.xanthenite.isining.composeapp.component.scaffold.main.ArtworkTopBar
 import com.xanthenite.isining.composeapp.utils.collectState
@@ -19,7 +18,7 @@ import com.xanthenite.isining.view.viewmodel.main.ArtworkViewModel
 @Composable
 fun ArtworkScreen(
     viewModel : ArtworkViewModel,
-    onNavigateToArtworkDetail : (Int) -> Unit)
+    onNavigateToArtworkDetail : (Int?) -> Unit)
 {
     val state by viewModel.collectState()
 
@@ -42,7 +41,7 @@ fun ArtworkContent(
         error : String? = null,
         onRefresh : () -> Unit,
         onToggleTheme : () -> Unit,
-        onNavigateToArtworkDetail : (Int) -> Unit)
+        onNavigateToArtworkDetail : (Int?) -> Unit)
 {
     ISiningScaffold(
         error = error,
