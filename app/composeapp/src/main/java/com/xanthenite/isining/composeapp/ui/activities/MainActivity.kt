@@ -16,7 +16,11 @@ import com.xanthenite.isining.R
 import com.xanthenite.isining.composeapp.navigation.RootNavGraph
 import com.xanthenite.isining.composeapp.ui.theme.ISiningTheme
 import com.xanthenite.isining.core.preference.PreferenceManager
+import com.xanthenite.isining.view.viewmodel.detail.ExhibitDetailViewModel
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.ActivityComponent
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,6 +28,12 @@ class MainActivity : AppCompatActivity()
 {
     @Inject
     lateinit var preferenceManager : PreferenceManager
+
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ViewModelFactoryProvider {
+        fun exhibitDetailViewModelFactory(): ExhibitDetailViewModel.Factory
+    }
 
     override fun onCreate(savedInstanceState : Bundle?)
     {

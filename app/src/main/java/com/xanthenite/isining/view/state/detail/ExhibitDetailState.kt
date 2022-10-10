@@ -5,7 +5,7 @@ import com.xanthenite.isining.view.state.State
 
 data class ExhibitDetailState(
         val isLoading: Boolean = false ,
-        val data : Exhibit ,
+        val data : Exhibit,
         val error: String? = null ,
         val isConnectivityAvailable: Boolean? = null ,
 ) : State

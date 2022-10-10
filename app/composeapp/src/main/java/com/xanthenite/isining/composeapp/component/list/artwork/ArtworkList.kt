@@ -11,23 +11,23 @@ import com.xanthenite.isining.composeapp.component.cards.artwork.ArtworkCard
 import com.xanthenite.isining.core.model.Artwork
 
 @Composable
-fun ArtworkList(data : List<Artwork>? , onClick : (Artwork) -> Unit)
+fun ArtworkList(data : List<Artwork?> , onClick : (Artwork) -> Unit)
 {
     LazyColumn(
         contentPadding = PaddingValues(vertical = 4.dp),
         modifier = Modifier.testTag("artworksList"))
     {
         items(
-            items = data!!,
+            items = data,
             itemContent = { index ->
                 ArtworkCard(
-                    imageUrl = index.pictures.first(),
-                    title =  index.title.orEmpty(),
-                    artistName = index.user_name.orEmpty(),
-                    onArtworkClick = { onClick(index) }
+                    imageUrl = index?.pictures?.first(),
+                    title =  index?.title.orEmpty(),
+                    artistName = index?.user_name.orEmpty(),
+                    onArtworkClick = { onClick(index!!) }
                 )
             },
-            key = { Triple(it.id, it.title, it.user_name) }
+            key = { Triple(it?.id, it?.title, it?.user_name) }
         )
     }
 }

@@ -21,11 +21,11 @@ fun ExhibitList(data : List<Exhibit>, onClick : (Exhibit) -> Unit)
             items = data,
             itemContent = { index ->
                 ExhibitCard(
-                imageUrl = index.cover_path ,
-                title =  index.title,
-                startDate =  index.start_date,
-                endDate = index.end_date,
-                onExhibitClick = { onClick(index) })
+                        imageUrl = index.cover_path ,
+                        title = index.title !! ,
+                        startDate = index.start_date !! ,
+                        endDate = index.end_date !! ,
+                        onExhibitClick = { onClick(index) })
             },
             key = { Triple(it.id, it.title, it.description)}
         )

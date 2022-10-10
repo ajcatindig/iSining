@@ -2,12 +2,14 @@ package com.xanthenite.isining.composeapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.xanthenite.isining.composeapp.component.bottombar.BottomBarHomeItem
+import com.xanthenite.isining.composeapp.ui.screens.detail.ExhibitDetailScreen
 import com.xanthenite.isining.composeapp.ui.screens.home.*
+import com.xanthenite.isining.composeapp.utils.assistedViewModel
+import com.xanthenite.isining.view.viewmodel.detail.ExhibitDetailViewModel
 
 @Composable
 fun MainNavGraph(navController : NavHostController)
@@ -28,7 +30,7 @@ fun MainNavGraph(navController : NavHostController)
         composable(route = BottomBarHomeItem.Exhibits.route) {
             ExhibitScreen(
                 viewModel = hiltViewModel(),
-                onNavigateToExhibitDetail = {/*TODO:Implement navigation to exhibit detail screen*/}
+                onNavigateToExhibitDetail = { navController.navigateToExhibitDetail(it) }
             )
         }
 
@@ -62,5 +64,30 @@ fun MainNavGraph(navController : NavHostController)
 
         authNavGraph(navController)
 
+        composable(
+            DetailScreen.Exhibit.route,
+            arguments = listOf(navArgument("id"){ type = NavType.IntType }))
+        {
+            val exhibitId = requireNotNull(it.arguments?.getInt(DetailScreen.Exhibit.ARG_EXHIBIT_ID.toString()))
+            ExhibitDetailScreen(
+                onNavigateUp = { navController.navigateUp() } ,
+                viewModel =  assistedViewModel {
+                    ExhibitDetailViewModel.provideFactory(exhibitDetailViewModelFactory(), exhibitId)
+                },
+                onNavigateToArtworkDetail = {})
+        }
+    }
+}
+
+/**
+ * Launches note detail screen for specified [exhibitId]
+ */
+fun NavController.navigateToExhibitDetail(id : Int) = navigate(DetailScreen.Exhibit.route(id))
+
+sealed class DetailScreen(val route : String, val name : String) {
+    object Exhibit : DetailScreen("exhibit/{id}", "Exhibit Details") {
+        fun route(id : Int) = "exhibit/$id"
+
+        const val ARG_EXHIBIT_ID : Int = 0
     }
 }

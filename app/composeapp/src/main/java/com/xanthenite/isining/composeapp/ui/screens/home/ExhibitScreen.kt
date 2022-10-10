@@ -64,7 +64,7 @@ fun ExhibitContent(
                     if (isConnectivityAvailable != null) {
                         ConnectivityStatus(isConnectivityAvailable)
                     }
-                    ExhibitList(data) { index -> onNavigateToExhibitDetail(index.id) }
+                    ExhibitList(data) { index -> onNavigateToExhibitDetail(index.id!!) }
                 }
             }
         }
