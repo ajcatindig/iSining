@@ -68,7 +68,7 @@ fun MainNavGraph(navController : NavHostController)
             DetailScreen.Exhibit.route,
             arguments = listOf(navArgument("id"){ type = NavType.IntType }))
         {
-            val exhibitId = requireNotNull(it.arguments?.getInt(DetailScreen.Exhibit.ARG_EXHIBIT_ID.toString()))
+            val exhibitId = requireNotNull(it.arguments?.getInt(DetailScreen.Exhibit.ARG_EXHIBIT_ID))
             ExhibitDetailScreen(
                 onNavigateUp = { navController.navigateUp() } ,
                 viewModel =  assistedViewModel {
@@ -88,6 +88,6 @@ sealed class DetailScreen(val route : String, val name : String) {
     object Exhibit : DetailScreen("exhibit/{id}", "Exhibit Details") {
         fun route(id : Int) = "exhibit/$id"
 
-        const val ARG_EXHIBIT_ID : Int = 0
+        const val ARG_EXHIBIT_ID : String = "id"
     }
 }

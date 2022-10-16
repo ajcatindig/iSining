@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.xanthenite.isining.core.connectivity.ConnectionState
+import com.xanthenite.isining.core.connectivity.ConnectivityObserver
 import com.xanthenite.isining.core.model.Exhibit
+import com.xanthenite.isining.core.repository.Either
 import com.xanthenite.isining.core.repository.ExhibitRepository
 import com.xanthenite.isining.di.RemoteRepository
 import com.xanthenite.isining.view.state.detail.ExhibitDetailState
@@ -16,12 +19,13 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class ExhibitDetailViewModel @AssistedInject constructor(
         @Assisted private val id : Int,
-        @RemoteRepository val exhibitRepository : ExhibitRepository
+        @RemoteRepository val exhibitRepository : ExhibitRepository,
+        private val connectivityObserver: ConnectivityObserver
 ) : BaseViewModel<ExhibitDetailState>(initialState = ExhibitDetailState(
         data = Exhibit(
                 id = null,
@@ -30,13 +34,22 @@ class ExhibitDetailViewModel @AssistedInject constructor(
                 cover_path = null,
                 start_date = null,
                 end_date = null,
-                artwork = null)))
+                artwork = emptyList())))
 {
-    private lateinit var selectedExhibit : Exhibit
+private lateinit var selectedExhibit : Exhibit
 
     init
     {
         loadExhibit()
+        observeConnectivity()
+    }
+
+    private fun observeConnectivity() {
+        connectivityObserver.connectionState
+                .distinctUntilChanged()
+                .map { it === ConnectionState.Available }
+                .onEach { setState { state -> state.copy(isConnectivityAvailable = it) } }
+                .launchIn(viewModelScope)
     }
 
     fun loadExhibit() {
@@ -50,7 +63,7 @@ class ExhibitDetailViewModel @AssistedInject constructor(
                 }
                 Log.d("Exhibit Data", "$exhibit")
             } else {
-                setState { state -> state.copy(isLoading = false) }
+                setState { state -> state.copy(isLoading = false, error = "An unknown error occurred") }
             }
         }
     }

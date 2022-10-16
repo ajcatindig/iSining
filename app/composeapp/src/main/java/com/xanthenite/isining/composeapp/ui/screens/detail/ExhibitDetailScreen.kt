@@ -12,8 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skydoves.landscapist.glide.GlideImage
 import com.xanthenite.isining.composeapp.R
+import com.xanthenite.isining.composeapp.component.ConnectivityStatus
 import com.xanthenite.isining.composeapp.component.anim.LottieAnimation
 import com.xanthenite.isining.composeapp.component.list.artwork.ArtworkList
 import com.xanthenite.isining.composeapp.component.scaffold.ISiningScaffold
@@ -33,6 +36,9 @@ fun ExhibitDetailScreen(
     ExhibitContent(
             data =  state.data ,
             error =  state.error ,
+            isLoading = state.isLoading ,
+            isConnectivityAvailable = state.isConnectivityAvailable,
+            onRefresh = viewModel::loadExhibit,
             onNavigateUp = onNavigateUp ,
             onNavigateToArtwork = onNavigateToArtworkDetail)
 }
@@ -41,8 +47,11 @@ fun ExhibitDetailScreen(
 @Composable
 fun ExhibitContent(
         data : Exhibit ,
+        isLoading : Boolean,
+        isConnectivityAvailable : Boolean?,
         error : String? ,
         onNavigateUp : () -> Unit ,
+        onRefresh : () -> Unit,
         onNavigateToArtwork : (Int) -> Unit)
 {
     ISiningScaffold(
@@ -52,135 +61,147 @@ fun ExhibitContent(
                 onNavigateUp = onNavigateUp)
         },
         content = {
-            Surface(modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.surface))
+            SwipeRefresh(
+                    state = rememberSwipeRefreshState(isLoading) ,
+                    onRefresh = onRefresh ,
+                    swipeEnabled = isConnectivityAvailable == true)
             {
-                Column(modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .fillMaxSize())
-                {
-                    //Image
-                    Column(modifier = Modifier.fillMaxWidth(),
-                           horizontalAlignment = Alignment.CenterHorizontally,
-                           verticalArrangement = Arrangement.Center)
+                Column {
+                    if (isConnectivityAvailable != null) {
+                        ConnectivityStatus(isConnectivityAvailable)
+                    }
+                    Surface(modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colors.surface)
+                            .verticalScroll(rememberScrollState()))
                     {
-                        Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 16.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically)
+                        Column(modifier = Modifier
+                                .fillMaxSize())
                         {
-                            GlideImage(
-                                imageModel = data.cover_path,
-                                modifier = Modifier
+                            //Image
+                            Column(modifier = Modifier.fillMaxWidth(),
+                                   horizontalAlignment = Alignment.CenterHorizontally,
+                                   verticalArrangement = Arrangement.Center)
+                            {
+                                Row(modifier = Modifier
                                         .fillMaxWidth()
-                                        .size(230.dp),
-                                loading = {
-                                    Box(modifier = Modifier.matchParentSize()) {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.align(Alignment.Center),
-                                            color = MaterialTheme.colors.onPrimary
-                                        )
-                                    }
-                                },
-                                failure = {
-                                    LottieAnimation(
-                                        resId = R.raw.error_404 ,
+                                        .padding(bottom = 16.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically)
+                                {
+                                    GlideImage(
+                                        imageModel = data.cover_path,
                                         modifier = Modifier
-                                            .matchParentSize()
-                                            .align(Alignment.Center)
+                                             .fillMaxWidth()
+                                             .size(230.dp),
+                                        loading = {
+                                            Box(modifier = Modifier.matchParentSize()) {
+                                                CircularProgressIndicator(
+                                                    modifier = Modifier.align(Alignment.Center),
+                                                    color = MaterialTheme.colors.onPrimary
+                                                )
+                                            }
+                                        },
+                                        failure = {
+                                            LottieAnimation(
+                                                resId = R.raw.error_404 ,
+                                                modifier = Modifier
+                                                    .matchParentSize()
+                                                    .align(Alignment.Center)
+                                            )
+                                        }
                                     )
                                 }
-                            )
+                            }
+                            //Title and date
+                            Column(modifier = Modifier
+                                    .fillMaxWidth(),
+                                   horizontalAlignment = Alignment.CenterHorizontally,
+                                   verticalArrangement = Arrangement.Center)
+                            {
+                                Row(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 16.dp , end = 16.dp , bottom = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start)
+                                {
+                                    Text(text = data.title.orEmpty() ,
+                                         style = MaterialTheme.typography.h4 ,
+                                         fontSize = 25.sp ,
+                                         maxLines = 3 ,
+                                         overflow = TextOverflow.Ellipsis)
+                                }
+                                Row(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start)
+                                {
+                                    Text(text = "From ${data.start_date.orEmpty()} until ${data.end_date.orEmpty()}",
+                                         style = MaterialTheme.typography.caption ,
+                                         fontSize = 16.sp)
+                                }
+//                        Row(modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            horizontalArrangement = Arrangement.Start)
+//                        {
+//                            Text(text = data.end_date.orEmpty(),
+//                                 style = MaterialTheme.typography.caption,
+//                                 fontSize = 16.sp)
+//                        }
+                            }
+                            //Description
+                            Column(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
+                                   verticalArrangement = Arrangement.Center,
+                                   horizontalAlignment = Alignment.CenterHorizontally)
+                            {
+                                Row(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 16.dp , end = 16.dp , bottom = 16.dp , top = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start)
+                                {
+                                    Text(text = "About this Exhibit",
+                                         style = MaterialTheme.typography.h5,
+                                         fontSize = 20.sp)
+                                }
+                                Row(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 16.dp , end = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start)
+                                {
+                                    Text(text = data.description.orEmpty(),
+                                         style = MaterialTheme.typography.caption,
+                                         fontSize = 16.sp,
+                                         lineHeight = 24.sp)
+                                }
+                            }
+                            //Artwork List
+                            Column(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
+                                   verticalArrangement = Arrangement.Center,
+                                   horizontalAlignment = Alignment.CenterHorizontally)
+                            {
+                                Row(modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 16.dp , end = 16.dp , top = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start)
+                                {
+                                    Text(text = "Artworks in this Exhibit",
+                                         style = MaterialTheme.typography.h5,
+                                         fontSize = 20.sp)
+                                }
+//                                data.artwork?.let { it -> ArtworkList(it) { index -> onNavigateToArtwork(index.id!!) } }
+                                //TODO: Display the list of Artworks inside the exhibit
+                            }
                         }
-                    }
-                    //Title and date
-                    Column(modifier = Modifier
-                            .fillMaxWidth(),
-                           horizontalAlignment = Alignment.CenterHorizontally,
-                           verticalArrangement = Arrangement.Center)
-                    {
-                        Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp , end = 16.dp , bottom = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start)
-                        {
-                            Text(text = data.title.orEmpty() ,
-                                 style = MaterialTheme.typography.h4 ,
-                                 fontSize = 25.sp ,
-                                 maxLines = 2 ,
-                                 overflow = TextOverflow.Ellipsis)
-                        }
-                        Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start)
-                        {
-                            Text(text = data.start_date.orEmpty(),
-                                 style = MaterialTheme.typography.caption ,
-                                 fontSize = 16.sp)
-                        }
-                        Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start)
-                        {
-                            Text(text = data.end_date.orEmpty(),
-                                 style = MaterialTheme.typography.caption,
-                                 fontSize = 16.sp)
-                        }
-                    }
-                    //Description
-                    Column(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                           verticalArrangement = Arrangement.Center,
-                           horizontalAlignment = Alignment.CenterHorizontally)
-                    {
-                        Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp , end = 16.dp , bottom = 16.dp , top = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start)
-                        {
-                            Text(text = "About the Exhibit",
-                                 style = MaterialTheme.typography.h5,
-                                 fontSize = 20.sp)
-                        }
-                        Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp , end = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start)
-                        {
-                            Text(text = data.description.orEmpty(),
-                                 style = MaterialTheme.typography.caption,
-                                 fontSize = 16.sp,
-                                 lineHeight = 24.sp)
-                        }
-                    }
-                    //Artwork List
-                    Column(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                           verticalArrangement = Arrangement.Center,
-                           horizontalAlignment = Alignment.CenterHorizontally)
-                    {
-                        Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp , end = 16.dp , top = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start)
-                        {
-                            Text(text = "Artworks in this Exhibit",
-                                 style = MaterialTheme.typography.h5,
-                                 fontSize = 20.sp)
-                        }
-                        data.artwork?.let { it1 -> ArtworkList(it1) { index -> onNavigateToArtwork(index.id!!) } }
                     }
                 }
             }

@@ -7,10 +7,8 @@ import com.xanthenite.isining.core.repository.ExhibitRepository
 import com.xanthenite.isining.data.remote.api.ExhibitService
 import com.xanthenite.isining.data.remote.model.response.State
 import com.xanthenite.isining.data.remote.util.getResponse
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,8 +20,15 @@ class ExhibitRepositoryImpl @Inject internal constructor(
     private val exhibitService : ExhibitService
 ) : ExhibitRepository
 {
-    override fun getExhibitById(id : Int) : Flow<Exhibit> {
-        TODO("Implement this function")
+    override fun getExhibitById(id : Int) : Flow<Exhibit> = flow {
+        val exhibitResponse = exhibitService.getExhibitById(id).getResponse()
+
+        when (exhibitResponse.state) {
+            State.SUCCESS -> Either.success(emit(exhibitResponse.data))
+            else -> Either.error(exhibitResponse.message!!)
+        }
+    }.catch {
+        Log.e("ExhibitRepositoryImpl", "catch ${it.message!!}")
     }
 
     override fun getAllExhibits() : Flow<Either<List<Exhibit>>> = flow {

@@ -15,7 +15,7 @@ interface ExhibitService
     suspend fun getAllExhibits() : Response<ExhibitsResponse>
 
     @Headers("Accept: application/json")
-    @GET("api/exhibits/{id}")
+    @GET("api/exhibit/{id}")
     suspend fun getExhibitById(@Path("id") id : Int) : Response<ExhibitResponse>
 
 }
