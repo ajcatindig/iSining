@@ -33,7 +33,8 @@ class ProfileViewModel @Inject constructor(
                 gender = null,
                 number = null,
                 email = null,
-                profile_photo_path = null)))
+                profile_photo_path = null,
+                bio = null)))
 {
     init {
         observeConnectivity()

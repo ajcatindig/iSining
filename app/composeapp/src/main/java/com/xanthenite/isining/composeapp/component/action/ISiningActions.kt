@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.LightbulbCircle
 import androidx.compose.material.icons.outlined.QrCodeScanner
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,6 +34,16 @@ fun ArScanAction(onClick : () -> Unit) {
              Modifier.padding(8.dp),
              tint = MaterialTheme.colors.onPrimary
         )
+    }
+}
+
+@Composable
+fun ShareAction(onClick : () -> Unit ) {
+    IconButton(onClick = onClick) {
+        Icon(imageVector = Icons.Outlined.Share ,
+             contentDescription = "Share",
+             Modifier.padding(8.dp),
+             tint = MaterialTheme.colors.onPrimary)
     }
 }
 

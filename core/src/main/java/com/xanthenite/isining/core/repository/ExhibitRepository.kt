@@ -18,7 +18,17 @@ interface ExhibitRepository
     fun getExhibitById(id : Int) : Flow<Exhibit>
 
     /**
-     * Returns all exhibits.
+     * Returns all current exhibits.
      */
-    fun getAllExhibits() : Flow<Either<List<Exhibit>>>
+    fun getCurrentExhibits() : Flow<Either<List<Exhibit>>>
+
+    /**
+     * Returns all upcoming exhibits.
+     */
+    fun getUpcomingExhibits() : Flow<Either<List<Exhibit>>>
+
+    /**
+     * Returns all past exhibits.
+     */
+    fun getPastExhibits() : Flow<Either<List<Exhibit>>>
 }

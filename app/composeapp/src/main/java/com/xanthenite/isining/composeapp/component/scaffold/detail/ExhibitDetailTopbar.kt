@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ExhibitDetailTopbar(
-        title : String = "Exhibit Detail",
+        title : String = "Exhibit Details",
         onNavigateUp : (() -> Unit)? = null)
 {
     TopAppBar(

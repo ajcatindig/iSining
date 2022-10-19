@@ -32,7 +32,8 @@ class HomeViewModel @Inject constructor(
                 gender = null,
                 number = null,
                 email = null,
-                profile_photo_path = null
+                profile_photo_path = null,
+                bio = null
                    ),
         artwork = Artwork(
                 id = null,
@@ -42,8 +43,9 @@ class HomeViewModel @Inject constructor(
                 width = null,
                 type = null,
                 price = null,
-                pictures = listOf(null),
-                user_name = null))))
+                user_name = null,
+                user = null,
+                pictures = listOf(null)))))
 {
 
     init {

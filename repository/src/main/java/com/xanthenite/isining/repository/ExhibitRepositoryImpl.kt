@@ -31,16 +31,44 @@ class ExhibitRepositoryImpl @Inject internal constructor(
         Log.e("ExhibitRepositoryImpl", "catch ${it.message!!}")
     }
 
-    override fun getAllExhibits() : Flow<Either<List<Exhibit>>> = flow {
-        val exhibitsResponse = exhibitService.getAllExhibits().getResponse()
+    override fun getCurrentExhibits() : Flow<Either<List<Exhibit>>> = flow {
+        val exhibitsResponse = exhibitService.getCurrentExhibits().getResponse()
 
         val state = when(exhibitsResponse.state) {
             State.SUCCESS -> Either.success(exhibitsResponse.data)
             else -> Either.error(exhibitsResponse.message!!)
         }
         emit(state)
-        Log.d("Data", "${exhibitsResponse.data}")
+        Log.d("Current Data", "${exhibitsResponse.data}")
      }.catch {
         Log.e("ExhibitRepositoryImpl", "catch ${it.message!!}")
         emit(Either.error("An unknown error occurred")) }
+
+    override fun getUpcomingExhibits() : Flow<Either<List<Exhibit>>> = flow {
+        val exhibitResponse = exhibitService.getUpcomingExhibits().getResponse()
+
+        val state = when(exhibitResponse.state) {
+            State.SUCCESS -> Either.success(exhibitResponse.data)
+            else -> Either.error(exhibitResponse.message!!)
+        }
+        emit(state)
+        Log.d("Upcoming Data", "${exhibitResponse.data}")
+    }.catch {
+        Log.e("ExhibitRepositoryImpl", "catch ${it.message!!}")
+        emit(Either.error("An unknown error occurred"))
+    }
+
+    override fun getPastExhibits() : Flow<Either<List<Exhibit>>> = flow {
+        val exhibitResponse = exhibitService.getPastExhibits().getResponse()
+
+        val state = when(exhibitResponse.state) {
+            State.SUCCESS -> Either.success(exhibitResponse.data)
+            else -> Either.error(exhibitResponse.message!!)
+    }
+        emit(state)
+        Log.d("Past Data", "${exhibitResponse.data}")
+    }.catch {
+        Log.e("ExhibitRepositoryImpl", "catch ${it.message!!}")
+        emit(Either.error("An unknown error occurred"))
+}
 }

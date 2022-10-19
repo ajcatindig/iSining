@@ -9,6 +9,7 @@ data class User(
         val type : String?,
         val gender : String?,
         val number : String?,
+        val bio : String?,
         val email : String?,
         val profile_photo_path : String?
 )

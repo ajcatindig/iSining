@@ -40,7 +40,9 @@ class ExhibitViewModel @Inject constructor(
     }
 
     fun getAllExhibits() {
-        exhibitRepository.getAllExhibits()
+        exhibitRepository.getCurrentExhibits()
+        exhibitRepository.getUpcomingExhibits()
+        exhibitRepository.getPastExhibits()
             .distinctUntilChanged()
             .onEach { response ->
                 response.onSuccess { data ->

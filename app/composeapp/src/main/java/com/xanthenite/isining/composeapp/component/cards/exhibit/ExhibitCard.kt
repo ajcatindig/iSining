@@ -1,5 +1,6 @@
 package com.xanthenite.isining.composeapp.component.cards.exhibit
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,26 +37,23 @@ fun ExhibitCard(
        shape = RoundedCornerShape(10.dp),
        backgroundColor = MaterialTheme.colors.surface,
        modifier = Modifier
-               .padding(horizontal = 16.dp , vertical = 4.dp)
+               .padding(vertical = 4.dp, horizontal = 8.dp)
                .fillMaxWidth()
                .wrapContentHeight()
                .clickable { onExhibitClick() },
        elevation = 2.dp)
     {
-        Row(verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(0.dp))
-        {
-            GlideImage(
+        GlideImage(
                 imageModel = imageUrl,
                 modifier = Modifier
-                        .size(140.dp)
-                        .clip(RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp)),
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(10.dp)),
                 loading = {
                     Box(modifier = Modifier.matchParentSize()) {
                         CircularProgressIndicator(
-                            modifier = Modifier
-                                .align(Alignment.Center),
-                            color = MaterialTheme.colors.onPrimary)
+                                modifier = Modifier
+                                        .align(Alignment.Center),
+                                color = MaterialTheme.colors.onPrimary)
                     }
                 },
                 failure = {
@@ -64,36 +64,58 @@ fun ExhibitCard(
                             .align(Alignment.Center)
                     )
                 }
-            )
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                   verticalArrangement = Arrangement.Center,
-                   horizontalAlignment = Alignment.Start)
+        )
+        Column(
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .size(200.dp)
+                        .background(MaterialTheme.colors.primary.copy(0.5f)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center)
+        {
+            Row(
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp, horizontal = 16.dp)
+                            .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.Center)
             {
-                Text(text = title,
-                     maxLines = 2,
-                     overflow = TextOverflow.Ellipsis,
-                     style = MaterialTheme.typography.h5,
-                     fontSize = 20.sp)
-                Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.Start)
-                {
-                    Text(text = "From: $startDate",
-                         style = MaterialTheme.typography.subtitle2,
-                         fontSize = 14.sp,
-                         fontStyle = FontStyle.Italic)
-                }
-                Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 2.dp),
-                    horizontalArrangement = Arrangement.Start)
-                {
-                    Text(text = "Until: $endDate",
-                         style = MaterialTheme.typography.subtitle2,
-                         fontSize = 14.sp,
-                         fontStyle = FontStyle.Italic)
-                }
+                Text(
+                        text = title ,
+                        style = MaterialTheme.typography.h5 ,
+                        color = Color.White ,
+                        fontSize = 25.sp ,
+                        maxLines = 2 ,
+                        overflow = TextOverflow.Ellipsis ,
+                        textAlign = TextAlign.Center)
+            }
+            Row(
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp, horizontal = 16.dp)
+                            .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.Center)
+            {
+                Text(
+                        text = "From $startDate" ,
+                        style = MaterialTheme.typography.subtitle1 ,
+                        color = Color.White ,
+                        fontSize = 18.sp ,
+                        textAlign = TextAlign.Center)
+            }
+            Row(
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp, horizontal = 16.dp)
+                            .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.Center)
+            {
+                Text(
+                        text = "Until $endDate" ,
+                        style = MaterialTheme.typography.subtitle1 ,
+                        color = Color.White ,
+                        fontSize = 18.sp ,
+                        textAlign = TextAlign.Center)
             }
         }
     }

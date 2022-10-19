@@ -53,5 +53,8 @@
 
 
     <string name="content_description_connectivity_icon">Connectivity status Icon</string>
+    <string name="visitUrl">https://i-sining.xyz</string>
+    <string name="terms_privacy">https://i-sining.xyz/terms-and-privacy</string>
+
 
 </resources>

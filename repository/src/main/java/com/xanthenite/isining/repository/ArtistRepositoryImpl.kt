@@ -21,9 +21,15 @@ class ArtistRepositoryImpl @Inject internal constructor(
         private val artistService : ArtistService
 ) : ArtistRepository
 {
-    override fun getArtistById(id : Int) : Flow<Artist>
-    {
-        TODO("Not yet implemented")
+    override fun getArtistById(id : Int) : Flow<Artist> = flow {
+        val artistResponse = artistService.getArtistById(id).getResponse()
+
+        when(artistResponse.state) {
+            State.SUCCESS -> Either.success(emit(artistResponse.data))
+            else -> Either.error(artistResponse.message!!)
+        }
+    }.catch {
+        Log.e("ArtistRepositoryImpl", "catch ${it.message!!}")
     }
 
     override fun getAllArtists() : Flow<Either<List<Artist>>> = flow {

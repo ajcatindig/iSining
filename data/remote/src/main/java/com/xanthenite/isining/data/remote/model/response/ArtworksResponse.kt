@@ -13,5 +13,5 @@ data class ArtworksResponse(
 data class ArtworkResponse(
         override val state : State ,
         override val message : String?,
-        val id : Int
+        val data : Artwork
 ) : BaseResponse

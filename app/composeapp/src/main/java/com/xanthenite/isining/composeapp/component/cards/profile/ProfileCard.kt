@@ -56,7 +56,7 @@ fun ProfileCard(
                         GlideImage(
                                 imageModel = data.profile_photo_path,
                                 modifier = Modifier
-                                        .size(120.dp)
+                                        .size(110.dp)
                                         .clip(CircleShape),
                                 loading = {
                                     Box(modifier = Modifier.matchParentSize())
@@ -76,6 +76,7 @@ fun ProfileCard(
                                                 text = substring.orEmpty() ,
                                                 modifier = Modifier.align(Alignment.Center) ,
                                                 style = MaterialTheme.typography.h4 ,
+                                                fontSize = 40.sp,
                                                 color = lightBlue)
                                     }
                                 }
@@ -112,7 +113,7 @@ fun ProfileCard(
                                     .padding(vertical = 8.dp),
                                 horizontalArrangement = Arrangement.Start)
                             {
-                                Text(text = data.number.orEmpty(),
+                                Text(text = data.number?:"No number provided",
                                      style = MaterialTheme.typography.subtitle2,
                                      fontSize = 16.sp,)
                             }

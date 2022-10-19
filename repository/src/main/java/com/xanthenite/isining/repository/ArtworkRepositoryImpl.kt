@@ -21,9 +21,15 @@ class ArtworkRepositoryImpl @Inject internal constructor(
         private val artworkService : ArtworkService
 ):ArtworkRepository
 {
-    override fun getArtworkById(id : Int) : Flow<Artwork>
-    {
-        TODO("Not yet implemented")
+    override fun getArtworkById(id : Int) : Flow<Artwork> = flow {
+        val artworkResponse = artworkService.getArtworkById(id).getResponse()
+
+        when(artworkResponse.state) {
+            State.SUCCESS -> Either.success(emit(artworkResponse.data))
+            else -> Either.error(artworkResponse.message!!)
+        }
+    }.catch {
+        Log.e("ArtworkRepositoryImpl", "catch ${it.message!!}")
     }
 
     override fun getAllArtworks() : Flow<Either<List<Artwork>>> = flow {

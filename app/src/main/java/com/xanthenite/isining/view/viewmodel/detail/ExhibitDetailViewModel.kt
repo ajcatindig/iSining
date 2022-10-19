@@ -33,8 +33,7 @@ class ExhibitDetailViewModel @AssistedInject constructor(
                 description = null,
                 cover_path = null,
                 start_date = null,
-                end_date = null,
-                artwork = emptyList())))
+                end_date = null)))
 {
 private lateinit var selectedExhibit : Exhibit
 

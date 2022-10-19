@@ -12,7 +12,15 @@ interface ExhibitService
 
     @Headers("Accept: application/json")
     @GET("api/exhibits")
-    suspend fun getAllExhibits() : Response<ExhibitsResponse>
+    suspend fun getCurrentExhibits() : Response<ExhibitsResponse>
+
+    @Headers("Accept: application/json")
+    @GET("api/exhibits/upcoming")
+    suspend fun getUpcomingExhibits() : Response<ExhibitsResponse>
+
+    @Headers("Accept: application/json")
+    @GET("api/exhibits/past")
+    suspend fun getPastExhibits() : Response<ExhibitsResponse>
 
     @Headers("Accept: application/json")
     @GET("api/exhibit/{id}")

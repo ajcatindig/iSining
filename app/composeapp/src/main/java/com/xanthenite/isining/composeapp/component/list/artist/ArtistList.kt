@@ -21,7 +21,7 @@ fun ArtistList(data : List<Artist>, onClick : (Artist) -> Unit)
             itemContent = { index ->
                 ArtistCard(
                     imageUrl = index.profile_photo_path ,
-                    artistName = index.name,
+                    artistName = index.name.orEmpty(),
                     onArtistClick = { onClick(index) }
                 )
             },

@@ -18,7 +18,7 @@ import com.xanthenite.isining.view.viewmodel.main.ArtworkViewModel
 @Composable
 fun ArtworkScreen(
     viewModel : ArtworkViewModel,
-    onNavigateToArtworkDetail : (Int?) -> Unit)
+    onNavigateToArtworkDetail : (Int) -> Unit)
 {
     val state by viewModel.collectState()
 
@@ -41,7 +41,7 @@ fun ArtworkContent(
         error : String? = null,
         onRefresh : () -> Unit,
         onToggleTheme : () -> Unit,
-        onNavigateToArtworkDetail : (Int?) -> Unit)
+        onNavigateToArtworkDetail : (Int) -> Unit)
 {
     ISiningScaffold(
         error = error,
@@ -61,7 +61,7 @@ fun ArtworkContent(
                     if (isConnectivityAvailable != null) {
                         ConnectivityStatus(isConnectivityAvailable)
                     }
-                    ArtworkList(data){ index -> onNavigateToArtworkDetail(index.id) }
+                    ArtworkList(data){ index -> onNavigateToArtworkDetail(index.id!!) }
                 }
             }
         }

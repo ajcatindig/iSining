@@ -36,7 +36,7 @@ fun ArtworkCard(
         modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(horizontal = 16.dp , vertical = 4.dp)
+                .padding(vertical = 4.dp, horizontal = 16.dp)
                 .clickable { onArtworkClick() },
         elevation = 2.dp)
     {
@@ -99,6 +99,87 @@ fun ArtworkCard(
                     color = Color.White,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center)
+            }
+        }
+    }
+}
+
+@Composable
+fun ArtworkRowCard(
+        imageUrl : String?,
+        title : String,
+        artistName : String,
+        onArtworkClick : () -> Unit)
+{
+    Card(
+            shape = RoundedCornerShape(10.dp),
+            backgroundColor = MaterialTheme.colors.surface,
+            modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(vertical = 4.dp, horizontal = 8.dp)
+                    .clickable { onArtworkClick() },
+            elevation = 2.dp)
+    {
+        GlideImage(
+                imageModel = imageUrl,
+                modifier = Modifier
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(10.dp)),
+                loading = {
+                    Box(modifier = Modifier.matchParentSize()) {
+                        CircularProgressIndicator(
+                                modifier = Modifier
+                                        .align(Alignment.Center),
+                                color = MaterialTheme.colors.onPrimary)
+                    }
+                },
+                failure = {
+                    LottieAnimation(
+                            resId = R.raw.error_404,
+                            modifier = Modifier
+                                    .matchParentSize()
+                                    .align(Alignment.Center)
+                                   )
+                }
+                  )
+        Column(
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .size(200.dp)
+                        .background(MaterialTheme.colors.primary.copy(0.5f)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center)
+        {
+            Row(
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp, horizontal = 16.dp)
+                            .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.Center)
+            {
+                Text(
+                        text = title,
+                        style = MaterialTheme.typography.h5,
+                        color = Color.White,
+                        fontSize = 25.sp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center)
+            }
+            Row(
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp, horizontal = 16.dp)
+                            .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.Center)
+            {
+                Text(
+                        text = "by $artistName",
+                        style = MaterialTheme.typography.subtitle1,
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center)
             }
         }
     }

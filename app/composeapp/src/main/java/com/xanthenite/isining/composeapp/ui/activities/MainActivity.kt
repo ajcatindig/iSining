@@ -16,6 +16,8 @@ import com.xanthenite.isining.R
 import com.xanthenite.isining.composeapp.navigation.RootNavGraph
 import com.xanthenite.isining.composeapp.ui.theme.ISiningTheme
 import com.xanthenite.isining.core.preference.PreferenceManager
+import com.xanthenite.isining.view.viewmodel.detail.ArtistDetailViewModel
+import com.xanthenite.isining.view.viewmodel.detail.ArtworkDetailViewModel
 import com.xanthenite.isining.view.viewmodel.detail.ExhibitDetailViewModel
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity()
     @InstallIn(ActivityComponent::class)
     interface ViewModelFactoryProvider {
         fun exhibitDetailViewModelFactory(): ExhibitDetailViewModel.Factory
+        fun artworkDetailViewModelFactory() : ArtworkDetailViewModel.Factory
+        fun artistDetailViewModelFactory() : ArtistDetailViewModel.Factory
     }
 
     override fun onCreate(savedInstanceState : Bundle?)

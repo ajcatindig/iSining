@@ -7,4 +7,4 @@ data class Exhibit(
     val cover_path : String?,
     val start_date : String?,
     val end_date : String?,
-    val artwork : List<Artwork>?)
+    val artwork : List<Artwork>? = listOf())

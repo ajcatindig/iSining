@@ -61,7 +61,7 @@ fun ArtistContent(
                     if (isConnectivityAvailable != null) {
                         ConnectivityStatus(isConnectivityAvailable)
                     }
-                    ArtistList(data) { index -> onNavigateToArtistDetail(index.id) }
+                    ArtistList(data) { index -> onNavigateToArtistDetail(index.id!!) }
                 }
             }
         }
