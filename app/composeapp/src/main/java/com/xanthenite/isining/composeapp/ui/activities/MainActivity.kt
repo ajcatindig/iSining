@@ -1,6 +1,7 @@
 package com.xanthenite.isining.composeapp.ui.activities
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,7 +16,13 @@ import com.xanthenite.isining.R
 import com.xanthenite.isining.composeapp.navigation.RootNavGraph
 import com.xanthenite.isining.composeapp.ui.theme.ISiningTheme
 import com.xanthenite.isining.core.preference.PreferenceManager
+import com.xanthenite.isining.view.viewmodel.detail.ArtistDetailViewModel
+import com.xanthenite.isining.view.viewmodel.detail.ArtworkDetailViewModel
+import com.xanthenite.isining.view.viewmodel.detail.ExhibitDetailViewModel
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.ActivityComponent
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,10 +31,19 @@ class MainActivity : AppCompatActivity()
     @Inject
     lateinit var preferenceManager : PreferenceManager
 
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ViewModelFactoryProvider {
+        fun exhibitDetailViewModelFactory(): ExhibitDetailViewModel.Factory
+        fun artworkDetailViewModelFactory() : ArtworkDetailViewModel.Factory
+        fun artistDetailViewModelFactory() : ArtistDetailViewModel.Factory
+    }
+
     override fun onCreate(savedInstanceState : Bundle?)
     {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE , WindowManager.LayoutParams.FLAG_SECURE)
         setContent {
             ISiningMain()
         }

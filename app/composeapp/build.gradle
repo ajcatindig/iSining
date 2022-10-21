@@ -105,7 +105,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$composeVersion"
     implementation "androidx.compose.ui:ui-tooling-preview:$composeVersion"
     implementation "androidx.paging:paging-compose:$pagingVersion"
-    implementation "io.coil-kt:coil-compose:$coilVersion"
+    implementation "com.github.skydoves:landscapist-glide:$glideVersion"
 
     // Dagger + Hilt
     implementation "com.google.dagger:hilt-android:$daggerHiltVersion"

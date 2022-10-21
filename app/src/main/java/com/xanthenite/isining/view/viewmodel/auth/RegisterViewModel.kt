@@ -56,10 +56,10 @@ class RegisterViewModel @Inject constructor(
                                 }
                         }.onFailure {
                                 setState { state ->
-                                        state.copy(
-                                                isLoading = false,
-                                                isSuccess = null,
-                                                error = "The email provided is already taken")
+                                     state.copy(
+                                          isLoading = false,
+                                          isSuccess = null,
+                                          error = "Entered username or email is already taken")
                                 }
                         }
                 }

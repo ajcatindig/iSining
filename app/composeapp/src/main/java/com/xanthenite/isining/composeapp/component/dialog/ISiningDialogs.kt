@@ -1,19 +1,15 @@
 package com.xanthenite.isining.composeapp.component.dialog
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.xanthenite.isining.R
 import com.xanthenite.isining.composeapp.component.anim.LottieAnimation
@@ -26,8 +22,8 @@ fun LoaderDialog() {
             LottieAnimation(
                     resId = R.raw.loading,
                     modifier = Modifier
-                        .padding(16.dp)
-                        .size(100.dp))
+                            .padding(16.dp)
+                            .size(100.dp))
         }
     }
 }
@@ -46,8 +42,8 @@ fun FailureDialog(failureMessage : String, onDismissed: () -> Unit = {})
                     LottieAnimation(
                             resId = R.raw.failure,
                             modifier = Modifier
-                                .padding(16.dp)
-                                .size(84.dp)
+                                    .padding(16.dp)
+                                    .size(84.dp)
                     )
                     Text(
                         text = failureMessage,
@@ -59,9 +55,9 @@ fun FailureDialog(failureMessage : String, onDismissed: () -> Unit = {})
                     )
                     Button(onClick = { isDismissed.value = true },
                            modifier = Modifier
-                               .fillMaxWidth()
-                               .height(80.dp)
-                               .padding(16.dp))
+                                   .fillMaxWidth()
+                                   .height(80.dp)
+                                   .padding(16.dp))
                     {
                         Text(style = typography.subtitle1, color = Color.White, text = "OK")
                     }
@@ -111,3 +107,66 @@ fun SuccessDialog(successMessage : String,
         }
     }
 }
+
+@Composable
+fun ConfirmationDialog(
+        title: String,
+        message: String,
+        onConfirmedYes: () -> Unit,
+        onConfirmedNo: () -> Unit,
+        onDismissed: () -> Unit
+                      ) {
+
+    var isDismissed by remember { mutableStateOf(false) }
+
+    if (!isDismissed) {
+        AlertDialog(
+            modifier = Modifier
+                    .fillMaxWidth(),
+            onDismissRequest = onDismissed,
+            title = {
+                Text(text = title)
+            },
+            text = {
+                Text(
+                    text = message,
+                    fontSize = 15.sp,)
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically)
+                {
+                    TextButton(
+                        onClick = {
+                            onConfirmedYes()
+                            isDismissed = true
+                        },
+                        modifier = Modifier
+                                .padding(4.dp),)
+                    {
+                        Text(
+                            text = "Yes",
+                            style = MaterialTheme.typography.button.copy(
+                                    fontWeight = FontWeight.Medium))
+                    }
+                    TextButton(
+                        onClick = {
+                            onConfirmedNo()
+                            isDismissed = true
+                        },
+                        modifier = Modifier
+                                .padding(4.dp),)
+                    {
+                        Text(
+                            text = "No",
+                            style = MaterialTheme.typography.button.copy(
+                                    fontWeight = FontWeight.Medium))
+                    }
+                }
+            },
+        )
+    }
+}
+

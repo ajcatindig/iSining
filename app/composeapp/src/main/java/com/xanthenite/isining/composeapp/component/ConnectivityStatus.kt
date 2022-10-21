@@ -7,6 +7,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -66,7 +67,7 @@ fun ConnectivityStatusBox(isConnected : Boolean)
                  contentDescription = "Connectivity Icon",
                  tint = Color.White)
             Spacer(modifier = Modifier.size(8.dp))
-            Text(message, color = Color.White, fontSize = 15.sp)
+            Text(message, color = Color.White, fontSize = 15.sp, style = MaterialTheme.typography.caption)
         }
     }
 }

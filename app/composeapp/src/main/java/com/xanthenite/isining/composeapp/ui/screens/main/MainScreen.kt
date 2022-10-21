@@ -27,7 +27,10 @@ fun MainScreen(navController : NavHostController = rememberNavController())
     val scaffoldState = rememberScaffoldState()
     Scaffold(bottomBar = { BottomBar(navController = navController) },
              scaffoldState = scaffoldState) {
-        MainNavGraph(navController = navController)
+        innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            MainNavGraph(navController = navController)
+        }
     }
 }
 
