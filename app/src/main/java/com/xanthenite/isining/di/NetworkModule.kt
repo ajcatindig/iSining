@@ -75,4 +75,12 @@ class NetworkModule
             .build()
             .create(FeaturedService::class.java)
     }
+
+    @Provides
+    fun provideTransactionService(authInterceptor : AuthInterceptor) : TransactionService {
+        return baseRetrofitBuilder
+            .client(okHttpClientBuilder.addInterceptor(authInterceptor).build())
+            .build()
+            .create(TransactionService::class.java)
+    }
 }

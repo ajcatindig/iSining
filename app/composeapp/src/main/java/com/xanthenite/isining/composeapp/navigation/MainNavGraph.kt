@@ -10,11 +10,14 @@ import com.xanthenite.isining.composeapp.ui.screens.detail.AboutScreen
 import com.xanthenite.isining.composeapp.ui.screens.detail.ArtistDetailScreen
 import com.xanthenite.isining.composeapp.ui.screens.detail.ArtworkDetailScreen
 import com.xanthenite.isining.composeapp.ui.screens.detail.ExhibitDetailScreen
+import com.xanthenite.isining.composeapp.ui.screens.form.HireArtistScreen
+import com.xanthenite.isining.composeapp.ui.screens.form.OfferFormScreen
 import com.xanthenite.isining.composeapp.ui.screens.home.*
 import com.xanthenite.isining.composeapp.utils.assistedViewModel
 import com.xanthenite.isining.view.viewmodel.detail.ArtistDetailViewModel
 import com.xanthenite.isining.view.viewmodel.detail.ArtworkDetailViewModel
 import com.xanthenite.isining.view.viewmodel.detail.ExhibitDetailViewModel
+import java.text.Normalizer.Form
 
 @Composable
 fun MainNavGraph(navController : NavHostController)
@@ -32,7 +35,8 @@ fun MainNavGraph(navController : NavHostController)
             )
         }
 
-        composable(route = BottomBarHomeItem.Exhibits.route) {
+        composable(route = BottomBarHomeItem.Exhibits.route)
+        {
             ExhibitScreen(
                 viewModel = hiltViewModel(),
                 viewModel1 = hiltViewModel(),
@@ -42,21 +46,24 @@ fun MainNavGraph(navController : NavHostController)
             )
         }
 
-        composable(route = BottomBarHomeItem.Artworks.route) {
+        composable(route = BottomBarHomeItem.Artworks.route)
+        {
             ArtworkScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToArtworkDetail = { navController.navigateToArtworkDetail(it) }
             )
         }
 
-        composable(route = BottomBarHomeItem.Artists.route) {
+        composable(route = BottomBarHomeItem.Artists.route)
+        {
             ArtistScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToArtistDetail = { navController.navigateToArtistDetail(it) }
             )
         }
 
-        composable(route = BottomBarHomeItem.Profile.route) {
+        composable(route = BottomBarHomeItem.Profile.route)
+        {
             ProfileScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToLogin = {
@@ -93,7 +100,8 @@ fun MainNavGraph(navController : NavHostController)
                 viewModel =  assistedViewModel {
                     ArtworkDetailViewModel.provideFactory(artworkDetailViewModelFactory(), artworkId)
                 },
-                onNavigateToArtist = { it1 -> navController.navigateToArtistDetail(it1) })
+                onNavigateToArtist = { it1 -> navController.navigateToArtistDetail(it1) },
+                onMakeOffer = { it1 -> navController.navigateToOfferForm(it1) })
         }
 
         composable(
@@ -106,7 +114,35 @@ fun MainNavGraph(navController : NavHostController)
                 viewModel =  assistedViewModel {
                     ArtistDetailViewModel.provideFactory(artistDetailViewModelFactory(), artistId)
                 },
-                onNavigateToArtwork = { it1 -> navController.navigateToArtworkDetail(it1) })
+                onNavigateToArtwork = { it1 -> navController.navigateToArtworkDetail(it1) },
+                onHireArtist = { it1 -> navController.navigateToCommissionForm(it1) })
+        }
+
+        composable(
+            FormScreen.Offer.route,
+            arguments = listOf(navArgument("id"){type = NavType.IntType}))
+        {
+            val artworkId = requireNotNull(it.arguments?.getInt(FormScreen.Offer.ARG_OFFER_ID))
+            OfferFormScreen(
+                    onNavigateUp = { navController.navigateUp()} ,
+                    viewModel1 =  assistedViewModel {
+                        ArtworkDetailViewModel.provideFactory(artworkDetailViewModelFactory(), artworkId)
+                    },
+                    viewModel2 = hiltViewModel() ,
+                    viewModel3 = hiltViewModel())
+        }
+
+        composable(
+            FormScreen.Commission.route,
+            arguments = listOf(navArgument("id"){type = NavType.IntType}))
+        {
+            val artistId = requireNotNull(it.arguments?.getInt(FormScreen.Commission.ARG_COMMISSION_ID))
+            HireArtistScreen(
+                    onNavigateUp = { navController.navigateUp() } ,
+                    viewModel1 =  assistedViewModel {
+                        ArtistDetailViewModel.provideFactory(artistDetailViewModelFactory(), artistId)
+                    },
+                    viewModel2 = hiltViewModel())
         }
 
         composable(DetailScreen.About.route) { AboutScreen(onNavigateUp = { navController.navigateUp() }) }
@@ -136,9 +172,20 @@ fun NavController.navigateToArtistDetail(id : Int) = navigate(DetailScreen.Artis
 fun NavController.navigateToAboutApp() = navigate(DetailScreen.About.route)
 
 /**
+ * Launches offer form screen for specified [artworkId]
+ */
+fun NavController.navigateToOfferForm(id : Int) = navigate(FormScreen.Offer.route(id))
+
+/**
+ * Launches commission form screen for specified [artistId]
+ */
+fun NavController.navigateToCommissionForm(id : Int) = navigate(FormScreen.Commission.route(id))
+
+/**
  * Sealed class for detail screens
  */
-sealed class DetailScreen(val route : String, val name : String) {
+sealed class DetailScreen(val route : String, val name : String)
+{
     object Exhibit : DetailScreen("exhibit/{id}", "Exhibit Details") {
         fun route(id : Int) = "exhibit/$id"
 
@@ -155,6 +202,23 @@ sealed class DetailScreen(val route : String, val name : String) {
         const val ARG_ARTIST_ID : String = "id"
     }
     object About : DetailScreen("about", "About App")
+}
+
+/**
+ * Sealed class for forms
+ */
+sealed class FormScreen(val route : String, val name : String)
+{
+    object Offer : FormScreen("offer/{id}", "Offer Form") {
+        fun route(id : Int) = "offer/$id"
+
+        const val ARG_OFFER_ID : String = "id"
+    }
+    object Commission : FormScreen("commission/{id}", "Commission Form") {
+        fun route(id : Int) = "commission/$id"
+
+        const val ARG_COMMISSION_ID : String = "id"
+    }
 }
 
 

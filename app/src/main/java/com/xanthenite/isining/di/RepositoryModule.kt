@@ -36,6 +36,10 @@ interface RepositoryModule
     @RemoteRepository
     fun iSiningFeaturedRepository(iSIningFeaturedRepository : FeaturedRepositoryImpl) : FeaturedRepository
 
+    @Binds
+    @RemoteRepository
+    fun iSiningTransactionRepository(iSiningTransactionRepository : TransactionRepositoryImpl) : TransactionRepository
+
 }
 
 @Qualifier
