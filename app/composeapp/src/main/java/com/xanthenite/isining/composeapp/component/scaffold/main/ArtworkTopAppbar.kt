@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun ArtworkTopBar(
-        title : String = "Gallery Artworks",
+        title : String = "Current Artworks",
         actions : @Composable() (RowScope.() -> Unit) = {})
 {
     TopAppBar(

@@ -39,7 +39,8 @@ import com.xanthenite.isining.view.viewmodel.detail.ArtworkDetailViewModel
 fun ArtworkDetailScreen(
         onNavigateUp : () -> Unit,
         viewModel : ArtworkDetailViewModel,
-        onNavigateToArtist : (Int) -> Unit)
+        onNavigateToArtist : (Int) -> Unit,
+        onMakeOffer : (Int) -> Unit)
 {
     val state by viewModel.collectState()
 
@@ -51,7 +52,8 @@ fun ArtworkDetailScreen(
             onNavigateUp = onNavigateUp ,
             onRefresh = viewModel::loadArtwork ,
             onNavigateToArtist = onNavigateToArtist,
-            onShareArtwork = {})
+            onShareArtwork = {},
+            onMakeOffer = onMakeOffer)
 
 }
 
@@ -64,7 +66,8 @@ fun ArtworkContent(
         onNavigateUp : () -> Unit ,
         onRefresh : () -> Unit,
         onNavigateToArtist : (Int) -> Unit,
-        onShareArtwork : () -> Unit)
+        onShareArtwork : () -> Unit,
+        onMakeOffer : (Int) -> Unit)
 {
     ISiningScaffold(
         error = error,
@@ -305,7 +308,7 @@ fun ArtworkContent(
                                            horizontalAlignment = Alignment.CenterHorizontally)
                                     {
                                         Button(
-                                            onClick = { /*TODO*/ },
+                                            onClick = { onMakeOffer(data.id!!) },
                                             modifier = Modifier
                                                     .fillMaxWidth()
                                                     .height(55.dp),

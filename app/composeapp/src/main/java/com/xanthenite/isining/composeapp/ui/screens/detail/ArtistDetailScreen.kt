@@ -35,7 +35,8 @@ import com.xanthenite.isining.view.viewmodel.detail.ArtistDetailViewModel
 fun ArtistDetailScreen(
         onNavigateUp : () -> Unit,
         viewModel : ArtistDetailViewModel,
-        onNavigateToArtwork : (Int) -> Unit)
+        onNavigateToArtwork : (Int) -> Unit,
+        onHireArtist : (Int) -> Unit)
 {
     val state by viewModel.collectState()
 
@@ -46,7 +47,8 @@ fun ArtistDetailScreen(
             error =  state.error,
             onNavigateUp = onNavigateUp ,
             onRefresh = viewModel::loadArtist ,
-            onNavigateToArtwork = onNavigateToArtwork)
+            onNavigateToArtwork = onNavigateToArtwork,
+            onHireArtist = onHireArtist)
 }
 
 @Composable
@@ -57,7 +59,8 @@ fun ArtistContent(
         error : String? ,
         onNavigateUp : () -> Unit ,
         onRefresh : () -> Unit ,
-        onNavigateToArtwork : (Int) -> Unit)
+        onNavigateToArtwork : (Int) -> Unit,
+        onHireArtist : (Int) -> Unit)
 {
     ISiningScaffold(
         error = error,
@@ -235,7 +238,7 @@ fun ArtistContent(
                                        horizontalAlignment = Alignment.CenterHorizontally)
                                 {
                                     Button(
-                                            onClick = { /*TODO*/ } ,
+                                            onClick = { onHireArtist(data.id!!) } ,
                                             modifier = Modifier
                                                     .fillMaxWidth()
                                                     .height(55.dp) ,

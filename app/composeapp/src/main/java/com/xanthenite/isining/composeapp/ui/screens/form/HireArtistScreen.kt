@@ -1,96 +1,83 @@
 package com.xanthenite.isining.composeapp.ui.screens.form
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.ArrowBackIos
+import androidx.compose.material.icons.outlined.LocationCity
+import androidx.compose.material.icons.outlined.NoteAlt
+import androidx.compose.material.icons.outlined.PriceChange
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.xanthenite.isining.composeapp.R
 import com.xanthenite.isining.composeapp.component.dialog.FailureDialog
 import com.xanthenite.isining.composeapp.component.dialog.LoaderDialog
 import com.xanthenite.isining.composeapp.component.dialog.SuccessDialog
 import com.xanthenite.isining.composeapp.ui.theme.typography
-import com.xanthenite.isining.composeapp.utils.ISiningPreview
 import com.xanthenite.isining.composeapp.utils.collectState
-import com.xanthenite.isining.core.model.Artwork
-import com.xanthenite.isining.core.model.PaymentChannel
-import com.xanthenite.isining.view.viewmodel.detail.ArtworkDetailViewModel
-import com.xanthenite.isining.view.viewmodel.form.OfferFormViewModel
-import com.xanthenite.isining.view.viewmodel.form.PaymentChannelViewModel
+import com.xanthenite.isining.core.model.Artist
+import com.xanthenite.isining.view.viewmodel.detail.ArtistDetailViewModel
+import com.xanthenite.isining.view.viewmodel.form.HireArtistViewModel
 
 @Composable
-fun OfferFormScreen(
-        onNavigateUp : () -> Unit,
-        viewModel1 : ArtworkDetailViewModel,
-        viewModel2 : PaymentChannelViewModel,
-        viewModel3 : OfferFormViewModel)
+fun HireArtistScreen(
+        onNavigateUp : () -> Unit ,
+        viewModel1 : ArtistDetailViewModel ,
+        viewModel2 : HireArtistViewModel)
 {
     val state1 by viewModel1.collectState()
     val state2 by viewModel2.collectState()
-    val state3 by viewModel3.collectState()
 
-    OfferContent(
-            isLoading = state3.isLoading ,
-            price =  state3.price ,
-            onPriceChange =  viewModel3::setPrice ,
-            address =  state3.address ,
-            onAddressChange =  viewModel3::setAddress ,
-            note =  state3.note ,
-            onNoteChange =  viewModel3::setNote ,
-            selectedChannel =  state3.payment_channel_id ,
-            onOptionSelected =  viewModel3::setPaymentChannelId ,
-            onSubmitClick = viewModel3::postOffer ,
-            onNavigateUp = onNavigateUp ,
-            isSuccess =  state3.isSuccess ,
-            error =  state3.error ,
-            paymentChannel =  state2.data ,
-            artwork = state1.data ,
-            selectedArtwork = state3.artwork_id ,
-            onArtworkSelected = viewModel3::setArtworkId)
+    HireArtistContent(
+            price =  state2.price,
+            onPriceChange =  viewModel2::setPrice,
+            address =  state2.address,
+            onAddressChange =  viewModel2::setAddress,
+            description =  state2.description,
+            onDescriptionChange =  viewModel2::setDescription,
+            artist =  state1.data,
+            selectedArtist =  state2.artist_user_id,
+            onSelectedArtist =  viewModel2::setArtistId,
+            onSubmitClick =  viewModel2::postCommission,
+            isLoading =  state2.isLoading,
+            isSuccess =  state2.isSuccess,
+            error = state2.error,
+            onNavigateUp = onNavigateUp)
 }
 
 @Composable
-fun OfferContent(
-        isLoading : Boolean ,
-        price : String? ,
+fun HireArtistContent(
+        price : String ,
         onPriceChange : (String) -> Unit ,
         address : String ,
         onAddressChange : (String) -> Unit ,
-        note : String? ,
-        onNoteChange : (String) -> Unit ,
-        selectedChannel : Int ,
-        onOptionSelected : (Int) -> Unit ,
+        description : String ,
+        onDescriptionChange : (String) -> Unit ,
+        artist : Artist ,
+        selectedArtist : Int ,
+        onSelectedArtist : (Int) -> Unit ,
         onSubmitClick : (Int) -> Unit ,
-        onNavigateUp : () -> Unit ,
-        isSuccess : String? ,
-        error : String? ,
-        paymentChannel : List<PaymentChannel> ,
-        artwork : Artwork ,
-        selectedArtwork : Int,
-        onArtworkSelected : (Int) -> Unit)
+        isLoading : Boolean ,
+        isSuccess : String?,
+        error : String?,
+        onNavigateUp : () -> Unit)
 {
     if (isLoading) {
         LoaderDialog()
@@ -103,63 +90,55 @@ fun OfferContent(
     if (isSuccess != null) {
         SuccessDialog(isSuccess)
     }
-
     Column(modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
             .verticalScroll(rememberScrollState()))
     {
-        BackToArtwork(Modifier.align(Alignment.Start), onBackClick = onNavigateUp)
+        BackToArtist(Modifier.align(Alignment.Start), onBackClick = onNavigateUp)
 
-        TopMessageOffer()
+        TopMessageHire()
 
-        OfferForm(
+        HireArtistForm(
                 price =  price,
                 onPriceChange =  onPriceChange,
                 address =  address,
                 onAddressChange =  onAddressChange,
-                note =  note,
-                onNoteChange =  onNoteChange,
-                onSubmitClick = onSubmitClick ,
-                paymentChannel = paymentChannel ,
-                selectedChannel =  selectedChannel,
-                onOptionSelected =  onOptionSelected,
-                artwork = artwork,
-                selectedArtwork = selectedArtwork,
-                onArtworkSelected = onArtworkSelected)
+                description =  description,
+                onDescriptionChange =  onDescriptionChange,
+                artist =  artist,
+                selectedArtist =  selectedArtist,
+                onSelectedArtist =  onSelectedArtist,
+                onSubmitClick = onSubmitClick)
     }
-
 }
 
 @Composable
-fun OfferForm(
-        price : String?,
+fun HireArtistForm(
+        price : String,
         onPriceChange : (String) -> Unit,
         address : String,
         onAddressChange : (String) -> Unit,
-        note : String?,
-        onNoteChange : (String) -> Unit,
-        onSubmitClick : (Int) -> Unit,
-        paymentChannel : List<PaymentChannel>,
-        selectedChannel : Int,
-        onOptionSelected : (Int) -> Unit,
-        artwork : Artwork,
-        selectedArtwork : Int,
-        onArtworkSelected : (Int) -> Unit)
+        description : String,
+        onDescriptionChange : (String) -> Unit,
+        artist : Artist,
+        selectedArtist : Int,
+        onSelectedArtist : (Int) -> Unit,
+        onSubmitClick : (Int) -> Unit)
 {
     val focusManager = LocalFocusManager.current
-    val isValidate by derivedStateOf { address.isNotBlank() && selectedChannel != 0}
-
+    val isValidate by derivedStateOf{
+        price.isNotBlank() && address.isNotBlank() && description.isNotBlank() }
 
     Column(modifier = Modifier
             .fillMaxSize())
     {
-        /**[Artwork]*/
+        /**[Artist]*/
         Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp , end = 16.dp , top = 20.dp , bottom = 16.dp),
-               horizontalAlignment = Alignment.CenterHorizontally,
-               verticalArrangement = Arrangement.Center)
+               verticalArrangement = Arrangement.Center,
+               horizontalAlignment = Alignment.CenterHorizontally)
         {
             Row(modifier = Modifier
                     .fillMaxWidth()
@@ -167,7 +146,7 @@ fun OfferForm(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically)
             {
-                Text(text = "Artwork Info",
+                Text(text = "Artist Info",
                      style = MaterialTheme.typography.subtitle1,
                      fontSize = 20.sp,
                      textAlign = TextAlign.Start)
@@ -178,20 +157,7 @@ fun OfferForm(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically)
             {
-                Text(text = "Title: ${artwork.title.orEmpty()}",
-                     style = MaterialTheme.typography.caption,
-                     fontSize = 18.sp,
-                     textAlign = TextAlign.Start,
-                     maxLines = 2,
-                     overflow = TextOverflow.Ellipsis)
-            }
-            Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically)
-            {
-                Text(text = "Artist: ${artwork.user_name.orEmpty()}",
+                Text(text = "Artist name: ${artist.name.orEmpty()}",
                      style = MaterialTheme.typography.caption,
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
@@ -202,70 +168,37 @@ fun OfferForm(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically)
             {
-                Text(text = "Price: ₱${artwork.price.orEmpty()}",
+                Text(text = "Email: ${artist.email.orEmpty()}",
+                     style = MaterialTheme.typography.caption,
+                     fontSize = 18.sp,
+                     textAlign = TextAlign.Start)
+            }
+            Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 4.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically)
+            {
+                Text(text = "Number: ${artist.number?:"No mobile number provided"}",
                      style = MaterialTheme.typography.caption,
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
             }
         }
-        /**[Modes]*/
+        /**[Offer]*/
         Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp , end = 16.dp , bottom = 16.dp),
-               verticalArrangement = Arrangement.Center,
-               horizontalAlignment = Alignment.CenterHorizontally)
-        {
-            Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically)
-            {
-                Text(text = "Mode of Payment",
-                     style = MaterialTheme.typography.subtitle1,
-                     fontSize = 18.sp,
-                     textAlign = TextAlign.Start)
-            }
-            paymentChannel.forEach { index ->
-                Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 4.dp)
-                        .selectable(selected = (selectedChannel == index.id) , onClick = { onOptionSelected(index.id) } , role = Role.RadioButton),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                   )
-                {
-                    RadioButton(
-                            selected = (selectedChannel == index.id) ,
-                            onClick = { onOptionSelected(index.id) },
-                            modifier = Modifier.padding(end = 8.dp),
-                            colors = RadioButtonDefaults.colors(
-                                    selectedColor = MaterialTheme.colors.onPrimary,
-                                    unselectedColor = MaterialTheme.colors.onPrimary.copy(alpha = 0.5f)
-                                                               )
-                               )
-                    Text(text = index.name,
-                         style = MaterialTheme.typography.caption,
-                         fontSize = 16.sp,
-                         textAlign = TextAlign.Start)
-                }
-            }
-
-        }
-        /**[offer]*/
-        Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp , end = 16.dp , bottom = 16.dp),
-               verticalArrangement = Arrangement.Center,
-               horizontalAlignment = Alignment.CenterHorizontally)
+               horizontalAlignment = Alignment.CenterHorizontally,
+               verticalArrangement = Arrangement.Center)
         {
             Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start)
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically)
             {
-                Text(text = "Offer Price (optional)",
+                Text(text = "Best Offer Price",
                      style = MaterialTheme.typography.subtitle1,
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
@@ -275,7 +208,7 @@ fun OfferForm(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center)
             {
-                OutlinedTextField(value = price.orEmpty() ,
+                OutlinedTextField(value = price ,
                                   onValueChange = onPriceChange ,
                                   modifier = Modifier.fillMaxWidth(),
                                   label = { Text(text = "Enter price in PHP (₱)") } ,
@@ -336,7 +269,7 @@ fun OfferForm(
                                   maxLines = 5)
             }
         }
-        /**[Note]*/
+        /**Description*/
         Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp , end = 16.dp , bottom = 20.dp),
@@ -349,7 +282,7 @@ fun OfferForm(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start)
             {
-                Text(text = "Additional Note (optional)",
+                Text(text = "Request Description",
                      style = MaterialTheme.typography.subtitle1,
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
@@ -359,10 +292,10 @@ fun OfferForm(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center)
             {
-                OutlinedTextField(value = note.orEmpty() ,
-                                  onValueChange = onNoteChange ,
+                OutlinedTextField(value = description ,
+                                  onValueChange = onDescriptionChange ,
                                   modifier = Modifier.fillMaxWidth(),
-                                  label = { Text(text = "Enter additional note for your offer") } ,
+                                  label = { Text(text = "Enter description for your request") } ,
                                   leadingIcon = { Icon(Icons.Outlined.NoteAlt , "") } ,
                                   textStyle = TextStyle(
                                           color = MaterialTheme.colors.onPrimary ,
@@ -383,19 +316,20 @@ fun OfferForm(
                verticalArrangement = Arrangement.Center)
         {
             Row(modifier = Modifier
-                    .fillMaxWidth() ,
-                horizontalArrangement = Arrangement.Center ,
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically)
             {
-                Button(onClick = { onSubmitClick(artwork.id!!) } ,
+
+                Button(onClick = { onSubmitClick(artist.id!!) } ,
                        enabled = isValidate ,
                        modifier = Modifier
-                               .fillMaxSize()
+                               .fillMaxWidth()
                                .height(50.dp) ,
                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black) ,
                        shape = RoundedCornerShape(10.dp))
                 {
-                    Text(text = "Submit Offer" , color = Color.White , style = typography.h6)
+                    Text(text = "Submit Request" , color = Color.White , style = typography.h6)
                 }
             }
         }
@@ -403,48 +337,28 @@ fun OfferForm(
 }
 
 @Composable
-fun BackToArtwork(modifier : Modifier, onBackClick : () -> Unit)
+fun BackToArtist(modifier : Modifier , onBackClick : () -> Unit)
 {
-    IconButton(onClick = onBackClick, modifier.padding(start = 8.dp, end = 8.dp, bottom = 4.dp, top = 20.dp))
+    IconButton(onClick = onBackClick,
+               modifier.padding(start = 8.dp, end = 8.dp, bottom = 4.dp, top = 20.dp))
     {
-        Icon(Icons.Outlined.ArrowBackIos , contentDescription = "",
+        Icon(Icons.Outlined.ArrowBackIos , contentDescription = "" ,
              tint = MaterialTheme.colors.onPrimary)
     }
 }
 
 @Composable
-fun TopMessageOffer()
+fun TopMessageHire()
 {
     Column(modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-           horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(horizontal = 16.dp) ,
+           horizontalAlignment = Alignment.CenterHorizontally ,
            verticalArrangement = Arrangement.Center)
     {
-        Text(text = "Make an Offer",
-             style = MaterialTheme.typography.h5,
-             fontSize = 25.sp,
+        Text(text = "Hire Artist" ,
+             style = MaterialTheme.typography.h5 ,
+             fontSize = 25.sp ,
              textAlign = TextAlign.Center)
     }
 }
-
-//@Preview
-//@Composable
-//fun OfferFormPreview() = ISiningPreview {
-//    OfferForm(price =  "1000.00" ,
-//              onPriceChange =  {} ,
-//              address =  "Sample Address" ,
-//              onAddressChange =  {} ,
-//              note =  "Sample Note" ,
-//              onNoteChange = {} ,
-//              onSubmitClick = {} ,
-//              onBackClick = {} ,
-//              paymentChannel = listOf(
-//                      PaymentChannel(1 , "Online Payment") ,
-//                      PaymentChannel(2, "Cash on Delivery")
-//                                     ) ,
-//              selectedChannel = 1,
-//              artwork = ,
-//              onOptionSelected = {})
-//}
-
