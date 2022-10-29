@@ -21,12 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.xanthenite.isining.composeapp.R
 import com.xanthenite.isining.composeapp.component.dialog.FailureDialog
 import com.xanthenite.isining.composeapp.component.dialog.LoaderDialog
 import com.xanthenite.isining.composeapp.component.dialog.SuccessDialog
@@ -59,7 +62,9 @@ fun HireArtistScreen(
             isLoading =  state2.isLoading,
             isSuccess =  state2.isSuccess,
             error = state2.error,
-            onNavigateUp = onNavigateUp)
+            onNavigateUp = onNavigateUp,
+            isValidAddress = state2.isValidAddress ?: true,
+            isValidDescription = state2.isValidDescription ?: true)
 }
 
 @Composable
@@ -77,7 +82,9 @@ fun HireArtistContent(
         isLoading : Boolean ,
         isSuccess : String?,
         error : String?,
-        onNavigateUp : () -> Unit)
+        onNavigateUp : () -> Unit,
+        isValidAddress : Boolean,
+        isValidDescription : Boolean)
 {
     if (isLoading) {
         LoaderDialog()
@@ -109,7 +116,9 @@ fun HireArtistContent(
                 artist =  artist,
                 selectedArtist =  selectedArtist,
                 onSelectedArtist =  onSelectedArtist,
-                onSubmitClick = onSubmitClick)
+                onSubmitClick = onSubmitClick,
+                isValidDescription = isValidDescription,
+                isValidAddress = isValidAddress)
     }
 }
 
@@ -124,8 +133,11 @@ fun HireArtistForm(
         artist : Artist,
         selectedArtist : Int,
         onSelectedArtist : (Int) -> Unit,
-        onSubmitClick : (Int) -> Unit)
+        onSubmitClick : (Int) -> Unit,
+        isValidAddress : Boolean,
+        isValidDescription : Boolean)
 {
+    val helperText = ""
     val focusManager = LocalFocusManager.current
     val isValidate by derivedStateOf{
         price.isNotBlank() && address.isNotBlank() && description.isNotBlank() }
@@ -179,7 +191,7 @@ fun HireArtistForm(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically)
             {
-                Text(text = "Number: ${artist.number?:"No mobile number provided"}",
+                Text(text = "Number: ${artist.mobile_number?:"No mobile number provided"}",
                      style = MaterialTheme.typography.caption,
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
@@ -231,7 +243,7 @@ fun HireArtistForm(
         Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp , end = 16.dp , bottom = 16.dp),
-               horizontalAlignment = Alignment.CenterHorizontally,
+               horizontalAlignment = Alignment.Start,
                verticalArrangement = Arrangement.Center)
         {
             Row(modifier = Modifier
@@ -245,28 +257,28 @@ fun HireArtistForm(
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
             }
-            Row(modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center)
-            {
-                OutlinedTextField(value = address ,
-                                  onValueChange = onAddressChange ,
-                                  modifier = Modifier.fillMaxWidth(),
-                                  label = { Text(text = "Enter your address") } ,
-                                  leadingIcon = { Icon(Icons.Outlined.LocationCity , "") } ,
-                                  textStyle = TextStyle(
-                                          color = MaterialTheme.colors.onPrimary ,
-                                          fontSize = 16.sp) ,
-                                  shape = RoundedCornerShape(10.dp) ,
-                                  keyboardOptions = KeyboardOptions(
-                                          keyboardType = KeyboardType.Text ,
-                                          imeAction = ImeAction.Next
-                                                                   ) ,
-                                  keyboardActions = KeyboardActions(onNext = {
-                                      focusManager.moveFocus(focusDirection = FocusDirection.Down)
-                                  }) ,
-                                  maxLines = 5)
+            OutlinedTextField(value = address ,
+                              onValueChange = onAddressChange ,
+                              modifier = Modifier.fillMaxWidth(),
+                              label = { Text(text = "Enter your address") } ,
+                              leadingIcon = { Icon(Icons.Outlined.LocationCity , "") } ,
+                              textStyle = TextStyle(
+                                      color = MaterialTheme.colors.onPrimary ,
+                                      fontSize = 16.sp) ,
+                              shape = RoundedCornerShape(10.dp) ,
+                              keyboardOptions = KeyboardOptions(
+                                      keyboardType = KeyboardType.Text ,
+                                      imeAction = ImeAction.Next
+                                                               ) ,
+                              keyboardActions = KeyboardActions(onNext = {
+                                  focusManager.moveFocus(focusDirection = FocusDirection.Down)
+                              }) ,
+                              maxLines = 5,
+                              isError = !isValidAddress)
+            if (helperText.isEmpty()) {
+                Spacer(modifier = Modifier.padding(1.dp))
+                Text(stringResource(id = R.string.message_address_invalid) ,
+                     style = MaterialTheme.typography.caption , fontStyle = FontStyle.Italic , textAlign = TextAlign.Start)
             }
         }
         /**Description*/
@@ -274,7 +286,7 @@ fun HireArtistForm(
                 .fillMaxWidth()
                 .padding(start = 16.dp , end = 16.dp , bottom = 20.dp),
                verticalArrangement = Arrangement.Center,
-               horizontalAlignment = Alignment.CenterHorizontally)
+               horizontalAlignment = Alignment.Start)
         {
             Row(modifier = Modifier
                     .fillMaxWidth()
@@ -287,25 +299,25 @@ fun HireArtistForm(
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
             }
-            Row(modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center)
-            {
-                OutlinedTextField(value = description ,
-                                  onValueChange = onDescriptionChange ,
-                                  modifier = Modifier.fillMaxWidth(),
-                                  label = { Text(text = "Enter description for your request") } ,
-                                  leadingIcon = { Icon(Icons.Outlined.NoteAlt , "") } ,
-                                  textStyle = TextStyle(
-                                          color = MaterialTheme.colors.onPrimary ,
-                                          fontSize = 16.sp) ,
-                                  shape = RoundedCornerShape(10.dp) ,
-                                  keyboardOptions = KeyboardOptions(
-                                          keyboardType = KeyboardType.Text ,
-                                          imeAction = ImeAction.Done) ,
-                                  keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })  ,
-                                  maxLines = 10)
+            OutlinedTextField(value = description ,
+                              onValueChange = onDescriptionChange ,
+                              modifier = Modifier.fillMaxWidth(),
+                              label = { Text(text = "Enter description for your request") } ,
+                              leadingIcon = { Icon(Icons.Outlined.NoteAlt , "") } ,
+                              textStyle = TextStyle(
+                                      color = MaterialTheme.colors.onPrimary ,
+                                      fontSize = 16.sp) ,
+                              shape = RoundedCornerShape(10.dp) ,
+                              keyboardOptions = KeyboardOptions(
+                                      keyboardType = KeyboardType.Text ,
+                                      imeAction = ImeAction.Done) ,
+                              keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })  ,
+                              maxLines = 10,
+                              isError = !isValidDescription)
+            if (helperText.isEmpty()) {
+                Spacer(modifier = Modifier.padding(1.dp))
+                Text(stringResource(id = R.string.message_description_invalid) ,
+                     style = MaterialTheme.typography.caption , fontStyle = FontStyle.Italic, textAlign = TextAlign.Start)
             }
         }
         /** [BUTTON]*/

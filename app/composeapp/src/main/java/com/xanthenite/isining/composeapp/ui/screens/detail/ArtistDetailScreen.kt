@@ -152,7 +152,7 @@ fun ArtistContent(
                                                         .fillMaxWidth(),
                                                     horizontalArrangement = Arrangement.Start)
                                                 {
-                                                    Text(text = data.number ?: "No number provided",
+                                                    Text(text = data.mobile_number ?: "No number provided",
                                                          style = MaterialTheme.typography.subtitle2,
                                                          fontSize = 16.sp)
                                                 }

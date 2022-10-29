@@ -75,4 +75,9 @@ class AuthRepositoryImpl @Inject internal constructor(
         }.getOrDefault(Either.error("Something went wrong!"))
     }
 
+    override suspend fun authenticate(verification_code : String) : Either<AuthCredential>
+    {
+        TODO("Not yet implemented")
+    }
+
 }

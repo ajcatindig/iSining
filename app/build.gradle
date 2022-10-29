@@ -69,6 +69,9 @@ dependencies {
     api "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     api "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
 
+    //Compose
+    implementation "androidx.compose.runtime:runtime:$composeVersion"
+
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:$workmanagerVersion"
     implementation "androidx.work:work-multiprocess:$workmanagerVersion"

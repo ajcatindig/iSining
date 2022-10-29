@@ -1,9 +1,7 @@
 package com.xanthenite.isining.repository
 
 import android.util.Log
-import com.xanthenite.isining.core.model.HireArtistResult
-import com.xanthenite.isining.core.model.OfferResult
-import com.xanthenite.isining.core.model.PaymentChannel
+import com.xanthenite.isining.core.model.*
 import com.xanthenite.isining.core.repository.Either
 import com.xanthenite.isining.core.repository.TransactionRepository
 import com.xanthenite.isining.data.remote.api.TransactionService
@@ -82,5 +80,47 @@ class TransactionRepositoryImpl @Inject internal constructor(
                 else -> Either.error(commissionResponse.message!!)
             }
         }.getOrDefault(Either.error("Something went wrong!"))
+    }
+
+    override fun getTransactions() : Flow<Either<List<Transaction>>> = flow {
+        val transactionResponse = transactionService.getTransactions().getResponse()
+
+        val state = when (transactionResponse.state) {
+            State.SUCCESS -> Either.success(transactionResponse.data)
+            else -> Either.error(transactionResponse.message!!)
+        }
+        emit(state)
+        Log.d("TransactionData", "${transactionResponse.data}")
+    }.catch {
+        Log.e("TransactionRepoImpl", "catch ${it.message!!}")
+        emit(Either.error("An unknown error occurred"))
+    }
+
+    override fun getOffers() : Flow<Either<List<Offer>>> = flow {
+        val offerResponse = transactionService.getOffers().getResponse()
+
+        val state = when (offerResponse.state) {
+            State.SUCCESS -> Either.success(offerResponse.data)
+            else -> Either.error(offerResponse.message!!)
+        }
+        emit(state)
+        Log.d("OffersList", "${offerResponse.data}")
+    }.catch {
+        Log.e("TransactionRepoImpl", "catch ${it.message!!}")
+        emit(Either.error("An unknown error occurred"))
+    }
+
+    override fun getCommissions() : Flow<Either<List<Commission>>> = flow {
+        val commissionResponse = transactionService.getCommissions().getResponse()
+
+        val state = when (commissionResponse.state) {
+            State.SUCCESS -> Either.success(commissionResponse.data)
+            else -> Either.error(commissionResponse.message!!)
+        }
+        emit(state)
+        Log.d("CommissionsList", "${commissionResponse.data}")
+    }.catch {
+        Log.e("TransactionRepoImpl","catch ${it.message!!}")
+        emit(Either.error("An unknown error occurred"))
     }
 }

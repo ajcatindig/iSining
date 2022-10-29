@@ -30,7 +30,7 @@ class ArtistDetailViewModel @AssistedInject constructor(
             birth_date = null,
             type = null,
             gender = null,
-            number = null,
+            mobile_number = null,
             bio = null,
             email = null,
             profile_photo_path = null)))

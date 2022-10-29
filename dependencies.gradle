@@ -25,6 +25,10 @@ ext {
     legacySupportVersion = "1.0.0"
     capturableVersion = "1.0.3"
     splashScreenVersion = "1.0.0-beta02"
+    camera = "1.0.2"
+    cameraLifecycle = "1.0.2"
+    cameraView = "1.0.0-alpha31"
+    zxing = "3.3.3"
 
     // Activity & Fragment
     activityVersion = "1.5.0"

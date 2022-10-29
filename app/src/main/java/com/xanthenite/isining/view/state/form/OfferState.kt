@@ -11,4 +11,5 @@ data class OfferState(
         val price : String? = "",
         val address : String = "",
         val note : String? = "",
+        val isValidAddress : Boolean? = null
 ) : State

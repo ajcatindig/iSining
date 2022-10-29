@@ -21,31 +21,7 @@ class HomeViewModel @Inject constructor(
         private val preferenceManager : PreferenceManager,
         private val connectivityObserver: ConnectivityObserver,
         @RemoteRepository val featuredRepository : FeaturedRepository
-) : BaseViewModel<HomeState>(initialState = HomeState(data = Featured(
-        user = User(
-                id = null,
-                name = null,
-                first_name = null,
-                last_name = null,
-                birthdate = null,
-                type = null,
-                gender = null,
-                number = null,
-                email = null,
-                profile_photo_path = null,
-                bio = null
-                   ),
-        artwork = Artwork(
-                id = null,
-                title = null,
-                description = null,
-                length = null,
-                width = null,
-                type = null,
-                price = null,
-                user_name = null,
-                user = null,
-                pictures = listOf(null)))))
+) : BaseViewModel<HomeState>(initialState = HomeState())
 {
 
     init {

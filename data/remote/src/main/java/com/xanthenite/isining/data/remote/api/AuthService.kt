@@ -3,6 +3,7 @@ package com.xanthenite.isining.data.remote.api
 import com.xanthenite.isining.data.remote.model.request.ForgotRequest
 import com.xanthenite.isining.data.remote.model.request.LoginRequest
 import com.xanthenite.isining.data.remote.model.request.RegisterRequest
+import com.xanthenite.isining.data.remote.model.request.TwoFactorRequest
 import com.xanthenite.isining.data.remote.model.response.AuthResponse
 import com.xanthenite.isining.data.remote.model.response.ForgotResponse
 import com.xanthenite.isining.data.remote.model.response.RegisterResponse
@@ -26,5 +27,9 @@ interface AuthService
     @Headers("Accept: application/json")
     @POST("api/password-reset")
     suspend fun forgotPass(@Body authRequest : ForgotRequest) : Response<ForgotResponse>
+
+    @Headers("Accept: application/json")
+    @POST("api/two-factor-challenge")
+    suspend fun authenticate(@Body twoFactorRequest : TwoFactorRequest) : Response<AuthResponse>
 
 }

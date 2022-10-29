@@ -33,4 +33,9 @@ interface AuthRepository
      *  Forgot Password
      */
     suspend fun forgotPassword(email : String) : Either<ForgotResult>
+
+    /**
+     * Two Factor Authentication
+     */
+    suspend fun authenticate(verification_code : String) : Either<AuthCredential>
 }

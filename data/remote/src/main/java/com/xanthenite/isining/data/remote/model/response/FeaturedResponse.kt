@@ -5,5 +5,5 @@ import com.xanthenite.isining.core.model.Featured
 data class FeaturedResponse(
         override val state : State ,
         override val message : String?,
-        val data : Featured
+        val data : Featured?
 ) : BaseResponse

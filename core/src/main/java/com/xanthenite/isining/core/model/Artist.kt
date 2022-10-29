@@ -8,7 +8,7 @@ data class Artist(
         val birth_date: String?,
         val type : String?,
         val gender : String?,
-        val number : String?,
+        val mobile_number : String?,
         val bio : String?,
         val email : String?,
         val profile_photo_path : String?,

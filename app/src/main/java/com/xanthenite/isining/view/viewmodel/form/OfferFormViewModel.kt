@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.xanthenite.isining.core.repository.TransactionRepository
 import com.xanthenite.isining.di.RemoteRepository
+import com.xanthenite.isining.utils.validator.UserValidator
 import com.xanthenite.isining.view.state.form.OfferState
 import com.xanthenite.isining.view.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,6 +37,7 @@ class OfferFormViewModel @Inject constructor(
     }
 
     fun postOffer(id : Int) {
+        if (!validateInfo()) return
         viewModelScope.launch {
             val payment_channel_id = currentState.payment_channel_id
             val price = currentState.price
@@ -70,5 +72,17 @@ class OfferFormViewModel @Inject constructor(
                 Log.e("OfferFormViewModel" , message)
             }
         }
+    }
+
+    private fun validateInfo() : Boolean {
+        val address = currentState.address
+
+        val isValidAddress = UserValidator.isValidAddress(address)
+
+        setState { state ->
+            state.copy(isValidAddress = isValidAddress)
+        }
+
+        return isValidAddress
     }
 }

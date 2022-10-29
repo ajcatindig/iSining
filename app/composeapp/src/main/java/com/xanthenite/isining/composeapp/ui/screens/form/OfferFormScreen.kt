@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -69,7 +70,8 @@ fun OfferFormScreen(
             paymentChannel =  state2.data ,
             artwork = state1.data ,
             selectedArtwork = state3.artwork_id ,
-            onArtworkSelected = viewModel3::setArtworkId)
+            onArtworkSelected = viewModel3::setArtworkId,
+            isValidAddress = state3.isValidAddress ?: true)
 }
 
 @Composable
@@ -90,7 +92,8 @@ fun OfferContent(
         paymentChannel : List<PaymentChannel> ,
         artwork : Artwork ,
         selectedArtwork : Int,
-        onArtworkSelected : (Int) -> Unit)
+        onArtworkSelected : (Int) -> Unit,
+        isValidAddress : Boolean)
 {
     if (isLoading) {
         LoaderDialog()
@@ -126,7 +129,8 @@ fun OfferContent(
                 onOptionSelected =  onOptionSelected,
                 artwork = artwork,
                 selectedArtwork = selectedArtwork,
-                onArtworkSelected = onArtworkSelected)
+                onArtworkSelected = onArtworkSelected,
+                isValidAddress = isValidAddress)
     }
 
 }
@@ -145,8 +149,10 @@ fun OfferForm(
         onOptionSelected : (Int) -> Unit,
         artwork : Artwork,
         selectedArtwork : Int,
-        onArtworkSelected : (Int) -> Unit)
+        onArtworkSelected : (Int) -> Unit,
+        isValidAddress : Boolean)
 {
+    val helperText = ""
     val focusManager = LocalFocusManager.current
     val isValidate by derivedStateOf { address.isNotBlank() && selectedChannel != 0}
 
@@ -298,7 +304,7 @@ fun OfferForm(
         Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp , end = 16.dp , bottom = 16.dp),
-               horizontalAlignment = Alignment.CenterHorizontally,
+               horizontalAlignment = Alignment.Start,
                verticalArrangement = Arrangement.Center)
         {
             Row(modifier = Modifier
@@ -312,28 +318,29 @@ fun OfferForm(
                      fontSize = 18.sp,
                      textAlign = TextAlign.Start)
             }
-            Row(modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center)
-            {
-                OutlinedTextField(value = address ,
-                                  onValueChange = onAddressChange ,
-                                  modifier = Modifier.fillMaxWidth(),
-                                  label = { Text(text = "Enter your address") } ,
-                                  leadingIcon = { Icon(Icons.Outlined.LocationCity , "") } ,
-                                  textStyle = TextStyle(
-                                          color = MaterialTheme.colors.onPrimary ,
-                                          fontSize = 16.sp) ,
-                                  shape = RoundedCornerShape(10.dp) ,
-                                  keyboardOptions = KeyboardOptions(
-                                          keyboardType = KeyboardType.Text ,
-                                          imeAction = ImeAction.Next
-                                                                   ) ,
-                                  keyboardActions = KeyboardActions(onNext = {
-                                      focusManager.moveFocus(focusDirection = FocusDirection.Down)
-                                  }) ,
-                                  maxLines = 5)
+            OutlinedTextField(value = address ,
+                              onValueChange = onAddressChange ,
+                              modifier = Modifier.fillMaxWidth(),
+                              label = { Text(text = "Enter your address") } ,
+                              leadingIcon = { Icon(Icons.Outlined.LocationCity , "") } ,
+                              textStyle = TextStyle(
+                                      color = MaterialTheme.colors.onPrimary ,
+                                      fontSize = 16.sp) ,
+                              shape = RoundedCornerShape(10.dp) ,
+                              keyboardOptions = KeyboardOptions(
+                                      keyboardType = KeyboardType.Text ,
+                                      imeAction = ImeAction.Next
+                                                               ) ,
+                              keyboardActions = KeyboardActions(onNext = {
+                                  focusManager.moveFocus(focusDirection = FocusDirection.Down)
+                              }) ,
+                              maxLines = 5,
+                              isError = !isValidAddress)
+            if (helperText.isEmpty()) {
+                Spacer(modifier = Modifier.padding(1.dp))
+                Text(
+                        stringResource(id = R.string.message_address_invalid) ,
+                        style = MaterialTheme.typography.caption , fontStyle = FontStyle.Italic , textAlign = TextAlign.Start)
             }
         }
         /**[Note]*/

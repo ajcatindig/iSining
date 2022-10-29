@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.xanthenite.isining.core.repository.TransactionRepository
 import com.xanthenite.isining.di.RemoteRepository
+import com.xanthenite.isining.utils.validator.UserValidator
 import com.xanthenite.isining.view.state.form.HireArtistState
 import com.xanthenite.isining.view.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +33,7 @@ class HireArtistViewModel @Inject constructor(
     }
 
     fun postCommission(id : Int) {
+        if (!validateInfo()) return
         viewModelScope.launch {
             val price = currentState.price
             val address = currentState.address
@@ -62,5 +64,19 @@ class HireArtistViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun validateInfo() : Boolean {
+        val address = currentState.address
+        val description = currentState.description
+
+        val isValidAddress = UserValidator.isValidAddress(address)
+        val isValidDescription = UserValidator.isValidDescription(description)
+
+        setState { state ->
+            state.copy(isValidAddress = isValidAddress, isValidDescription = isValidDescription)
+        }
+
+        return isValidAddress && isValidDescription
     }
 }
