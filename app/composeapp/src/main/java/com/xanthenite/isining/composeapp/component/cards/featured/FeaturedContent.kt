@@ -27,12 +27,12 @@ import com.xanthenite.isining.core.model.Featured
 @Composable
 fun FeaturedContent(data : Featured)
 {
-    LazyColumn {
-        item {
-            Surface(modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.surface))
-            {
+    Surface(modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface))
+    {
+        LazyColumn {
+            item {
                 Column {
                     Column(modifier = Modifier
                             .fillMaxWidth()
@@ -63,27 +63,27 @@ fun FeaturedContent(data : Featured)
                             horizontalArrangement = Arrangement.Center)
                         {
                             GlideImage(
-                               imageModel = data.user.profile_photo_path ,
-                               contentScale = ContentScale.FillWidth,
-                               modifier = Modifier
-                                       .clip(RoundedCornerShape(10.dp)),
-                               loading = {
-                                   Box(modifier = Modifier.matchParentSize()) {
-                                       CircularProgressIndicator(
-                                           modifier = Modifier
-                                                   .align(Alignment.Center),
-                                           color = MaterialTheme.colors.onPrimary)
-                                   }
-                               } ,
-                               failure = {
-                                   LottieAnimation(
-                                       resId = R.raw.error_404 ,
-                                       modifier = Modifier
-                                           .matchParentSize()
-                                           .align(Alignment.Center)
-                                   )
-                               }
-                            )
+                                    imageModel = data.user.profile_photo_path ,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier
+                                            .clip(RoundedCornerShape(10.dp)),
+                                    loading = {
+                                        Box(modifier = Modifier.matchParentSize()) {
+                                            CircularProgressIndicator(
+                                                    modifier = Modifier
+                                                            .align(Alignment.Center),
+                                                    color = MaterialTheme.colors.onPrimary)
+                                        }
+                                    } ,
+                                    failure = {
+                                        LottieAnimation(
+                                                resId = R.raw.error_404 ,
+                                                modifier = Modifier
+                                                        .matchParentSize()
+                                                        .align(Alignment.Center)
+                                                       )
+                                    }
+                                      )
                         }
                     }
                     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
@@ -100,17 +100,7 @@ fun FeaturedContent(data : Featured)
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically)
                         {
-                            Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-                                        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " +
-                                        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat " +
-                                        "cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." +
-                                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa " +
-                                        "quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem " +
-                                        "quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. " +
-                                        "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora " +
-                                        "incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis " +
-                                        "suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse " +
-                                        "quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
+                            Text(text = data.user.bio?:"No bio provided.",
                                  style = MaterialTheme.typography.caption,
                                  fontSize = 16.sp,
                                  lineHeight = 24.sp)
@@ -145,27 +135,27 @@ fun FeaturedContent(data : Featured)
                             horizontalArrangement = Arrangement.Center)
                         {
                             GlideImage(
-                                imageModel = data.artwork.pictures.first().orEmpty() ,
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier
-                                        .clip(RoundedCornerShape(10.dp)),
-                                loading = {
-                                    Box(modifier = Modifier.matchParentSize()) {
-                                        CircularProgressIndicator(
-                                           modifier = Modifier
-                                                   .align(Alignment.Center),
-                                           color = MaterialTheme.colors.onPrimary)
+                                    imageModel = data.artwork.pictures.first().orEmpty() ,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier
+                                            .clip(RoundedCornerShape(10.dp)),
+                                    loading = {
+                                        Box(modifier = Modifier.matchParentSize()) {
+                                            CircularProgressIndicator(
+                                                    modifier = Modifier
+                                                            .align(Alignment.Center),
+                                                    color = MaterialTheme.colors.onPrimary)
+                                        }
+                                    } ,
+                                    failure = {
+                                        LottieAnimation(
+                                                resId = R.raw.error_404 ,
+                                                modifier = Modifier
+                                                        .matchParentSize()
+                                                        .align(Alignment.Center)
+                                                       )
                                     }
-                                } ,
-                                failure = {
-                                    LottieAnimation(
-                                        resId = R.raw.error_404 ,
-                                        modifier = Modifier
-                                                .matchParentSize()
-                                                .align(Alignment.Center)
-                                    )
-                                }
-                            )
+                                      )
                         }
                     }
                     Column(modifier = Modifier.padding(horizontal = 24.dp),

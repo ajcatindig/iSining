@@ -9,5 +9,7 @@ data class HireArtistState(
         val artist_user_id : Int = 0,
         val price : String = "",
         val address : String = "",
-        val description : String = ""
+        val description : String = "",
+        val isValidAddress : Boolean? = null,
+        val isValidDescription : Boolean? = null
 ) : State

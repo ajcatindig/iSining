@@ -57,6 +57,7 @@ dependencies {
     // Moshi Retrofit Converter
     api "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
 
+
     // Testing
     testImplementation "junit:junit:$jUnitVersion"
     testImplementation "io.kotest:kotest-runner-junit5:$kotestVersion"

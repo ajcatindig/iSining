@@ -10,9 +10,9 @@ import com.xanthenite.isining.composeapp.ui.screens.detail.AboutScreen
 import com.xanthenite.isining.composeapp.ui.screens.detail.ArtistDetailScreen
 import com.xanthenite.isining.composeapp.ui.screens.detail.ArtworkDetailScreen
 import com.xanthenite.isining.composeapp.ui.screens.detail.ExhibitDetailScreen
-import com.xanthenite.isining.composeapp.ui.screens.form.HireArtistScreen
-import com.xanthenite.isining.composeapp.ui.screens.form.OfferFormScreen
+import com.xanthenite.isining.composeapp.ui.screens.form.*
 import com.xanthenite.isining.composeapp.ui.screens.home.*
+import com.xanthenite.isining.composeapp.ui.screens.qr.QRScanner
 import com.xanthenite.isining.composeapp.utils.assistedViewModel
 import com.xanthenite.isining.view.viewmodel.detail.ArtistDetailViewModel
 import com.xanthenite.isining.view.viewmodel.detail.ArtworkDetailViewModel
@@ -31,7 +31,7 @@ fun MainNavGraph(navController : NavHostController)
         {
             HomeScreen(
                 viewModel = hiltViewModel(),
-                onNavigateToAr = {}
+                onNavigateToAr = { navController.navigateToScanner() }
             )
         }
 
@@ -71,9 +71,11 @@ fun MainNavGraph(navController : NavHostController)
                     navController.navigate(Graph.AUTHENTICATION)
                 },
                 onAboutAppCLick = { navController.navigateToAboutApp() },
-                onTransactionClick = {},
-                onManageProfileClick = {},
-                onChangePasswordClick = {}
+                onTransactionClick = { navController.navigateToTransactions() },
+                onManageProfileClick = { navController.navigateToUpdateForm() },
+                onChangePasswordClick = { navController.navigateToChangePass() },
+                onOffersClick = { navController.navigateToOffers() },
+                onCommissionsClick = { navController.navigateToCommissions() }
             )
         }
 
@@ -145,6 +147,41 @@ fun MainNavGraph(navController : NavHostController)
                     viewModel2 = hiltViewModel())
         }
 
+        composable(FormScreen.UpdateProf.route)
+        {
+            ManageProfileScreen(onNavigateUp = { navController.navigateUp() } ,
+                                viewModel =  hiltViewModel())
+        }
+
+        composable(FormScreen.ChangePassword.route)
+        {
+            ChangePasswordScreen(onNavigateUp = { navController.navigateUp()} ,
+                                 viewModel = hiltViewModel())
+        }
+
+        composable(DetailScreen.Transactions.route)
+        {
+            TransactionListScreen(onNavigateUp = { navController.navigateUp() } ,
+                                  viewModel = hiltViewModel())
+        }
+
+        composable(DetailScreen.Offers.route)
+        {
+            OfferListScreen(onNavigateUp = { navController.navigateUp() } ,
+                                  viewModel = hiltViewModel())
+        }
+
+        composable(DetailScreen.Commissions.route)
+        {
+            CommissionListScreen(onNavigateUp = { navController.navigateUp() } ,
+                            viewModel = hiltViewModel())
+        }
+
+        composable(ARScreen.QRScreen.route)
+        {
+            QRScanner(onNavigateUp = { navController.navigateUp() })
+        }
+
         composable(DetailScreen.About.route) { AboutScreen(onNavigateUp = { navController.navigateUp() }) }
 
         authNavGraph(navController)
@@ -182,6 +219,36 @@ fun NavController.navigateToOfferForm(id : Int) = navigate(FormScreen.Offer.rout
 fun NavController.navigateToCommissionForm(id : Int) = navigate(FormScreen.Commission.route(id))
 
 /**
+ * Launches update form for current user
+ */
+fun NavController.navigateToUpdateForm() = navigate(FormScreen.UpdateProf.route)
+
+/**
+ * Launches change password form for current user
+ */
+fun NavController.navigateToChangePass() = navigate(FormScreen.ChangePassword.route)
+
+/**
+ * Launches transaction list
+ */
+fun NavController.navigateToTransactions() = navigate(DetailScreen.Transactions.route)
+
+/**
+ * Launches offers list
+ */
+fun NavController.navigateToOffers() = navigate(DetailScreen.Offers.route)
+
+/**
+ * Launches commissions list
+ */
+fun NavController.navigateToCommissions() = navigate(DetailScreen.Commissions.route)
+
+/**
+ * Launches Scanner
+ */
+fun NavController.navigateToScanner() = navigate(ARScreen.QRScreen.route)
+
+/**
  * Sealed class for detail screens
  */
 sealed class DetailScreen(val route : String, val name : String)
@@ -201,6 +268,9 @@ sealed class DetailScreen(val route : String, val name : String)
 
         const val ARG_ARTIST_ID : String = "id"
     }
+    object Transactions : DetailScreen("transactions", "Transaction List")
+    object Offers : DetailScreen("offers", "Offers List")
+    object Commissions : DetailScreen("commissions", "Commissions List")
     object About : DetailScreen("about", "About App")
 }
 
@@ -219,6 +289,16 @@ sealed class FormScreen(val route : String, val name : String)
 
         const val ARG_COMMISSION_ID : String = "id"
     }
+    object UpdateProf : FormScreen("user", "User Form")
+    object ChangePassword : FormScreen("changePassword", "Change Password")
+}
+
+/**
+ * Sealed class for AR
+ */
+sealed class ARScreen(val route : String, val name : String)
+{
+    object QRScreen : ARScreen("qrScanner", "QR Scanner")
 }
 
 

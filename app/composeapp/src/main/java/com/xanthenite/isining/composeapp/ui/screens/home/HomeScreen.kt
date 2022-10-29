@@ -14,11 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.xanthenite.isining.composeapp.R
 import com.xanthenite.isining.composeapp.component.ConnectivityStatus
 import com.xanthenite.isining.composeapp.component.action.ArScanAction
 import com.xanthenite.isining.composeapp.component.action.ThemeSwitchAction
+import com.xanthenite.isining.composeapp.component.anim.LottieAnimation
 import com.xanthenite.isining.composeapp.component.cards.featured.FeaturedContent
 import com.xanthenite.isining.composeapp.component.scaffold.main.HomeTopBar
 import com.xanthenite.isining.composeapp.component.scaffold.ISiningScaffold
@@ -48,7 +51,7 @@ fun HomeScreen(viewModel : HomeViewModel ,
 fun HomeContent(
         isLoading : Boolean ,
         isConnectivityAvailable : Boolean? ,
-        data : Featured ,
+        data : Featured? ,
         error : String? = null ,
         onRefresh : () -> Unit ,
         onToggleTheme : () -> Unit ,
@@ -74,7 +77,35 @@ fun HomeContent(
                     if (isConnectivityAvailable != null) {
                         ConnectivityStatus(isConnectivityAvailable)
                     }
-                    FeaturedContent(data = data)
+                    if (data != null) {
+                        FeaturedContent(data = data)
+                    } else {
+                        Column(modifier = Modifier
+                                .fillMaxSize(),
+                               horizontalAlignment = Alignment.CenterHorizontally,
+                               verticalArrangement = Arrangement.Center)
+                        {
+                            Row(modifier = Modifier
+                                    .fillMaxWidth() ,
+                                horizontalArrangement = Arrangement.Center ,
+                                verticalAlignment = Alignment.CenterVertically)
+                            {
+                                LottieAnimation(resId = R.raw.no_artworks ,
+                                                modifier = Modifier.size(250.dp))
+                            }
+                            Row(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp , vertical = 8.dp) ,
+                                horizontalArrangement = Arrangement.Center ,
+                                verticalAlignment = Alignment.CenterVertically)
+                            {
+                                Text(text = "No data found" ,
+                                     style = MaterialTheme.typography.h5 ,
+                                     fontSize = 18.sp ,
+                                     textAlign = TextAlign.Center)
+                            }
+                        }
+                    }
                 }
             }
         }

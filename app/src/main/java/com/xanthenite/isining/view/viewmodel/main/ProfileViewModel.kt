@@ -31,10 +31,11 @@ class ProfileViewModel @Inject constructor(
                 birthdate = null,
                 type = null,
                 gender = null,
-                number = null,
+                mobile_number = null,
                 email = null,
                 profile_photo_path = null,
-                bio = null)))
+                bio = null,
+                address = null)))
 {
     init {
         observeConnectivity()

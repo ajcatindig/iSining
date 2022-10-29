@@ -13,5 +13,5 @@ interface FeaturedRepository
     /**
      * Returns current featured artist and artwork.
      */
-    fun getCurrentFeatured() : Flow<Either<Featured>>
+    fun getCurrentFeatured() : Flow<Either<Featured?>>
 }

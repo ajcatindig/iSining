@@ -26,7 +26,9 @@ fun ProfileScreen(
     onChangePasswordClick : () -> Unit,
     onAboutAppCLick : () -> Unit,
     onManageProfileClick : () -> Unit,
-    onTransactionClick : () -> Unit)
+    onTransactionClick : () -> Unit,
+    onOffersClick : () -> Unit,
+    onCommissionsClick : () -> Unit)
 {
 
     val state by viewModel.collectState()
@@ -45,7 +47,9 @@ fun ProfileScreen(
         onChangePasswordClick = onChangePasswordClick,
         onAboutAppCLick = onAboutAppCLick,
         onManageProfileClick = onManageProfileClick,
-        onTransactionClick = onTransactionClick)
+        onTransactionClick = onTransactionClick,
+        onOffersClick = onOffersClick,
+        onCommissionsClick = onCommissionsClick)
 
     LogoutConfirmation(
             show = showLogoutConfirmation,
@@ -73,7 +77,9 @@ fun ProfileContent(
         onChangePasswordClick : () -> Unit,
         onAboutAppCLick : () -> Unit,
         onManageProfileClick : () -> Unit,
-        onTransactionClick : () -> Unit)
+        onTransactionClick : () -> Unit,
+        onOffersClick : () -> Unit,
+        onCommissionsClick : () -> Unit)
 {
     ISiningScaffold(
         error = error,
@@ -99,7 +105,9 @@ fun ProfileContent(
                             onChangePasswordClick = { onChangePasswordClick() } ,
                             onAboutAppClick = { onAboutAppCLick() } ,
                             onTransactionClick = { onTransactionClick() },
-                            onManageProfileClick = { onManageProfileClick() })
+                            onManageProfileClick = { onManageProfileClick() },
+                            onOffersClick = { onOffersClick() },
+                            onCommissionsClick = { onCommissionsClick() })
                 }
             }
         }

@@ -5,7 +5,7 @@ import com.xanthenite.isining.view.state.State
 
 data class HomeState(
         val isLoading: Boolean = false,
-        val data : Featured,
+        val data : Featured? = null,
         val error: String? = null,
         val isConnectivityAvailable: Boolean? = null
 ) : State

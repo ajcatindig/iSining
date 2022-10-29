@@ -39,8 +39,7 @@ import com.xanthenite.isining.view.viewmodel.auth.ForgotViewModel
 @Composable
 fun ForgotScreen(
         onNavigateUp : () -> Unit,
-        viewModel : ForgotViewModel
-                )
+        viewModel : ForgotViewModel)
 {
     val state by viewModel.collectState()
 

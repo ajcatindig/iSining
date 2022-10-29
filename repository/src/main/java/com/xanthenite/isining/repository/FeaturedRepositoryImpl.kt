@@ -18,7 +18,7 @@ class FeaturedRepositoryImpl @Inject internal constructor(
         private val featuredService : FeaturedService
 ) : FeaturedRepository
 {
-    override fun getCurrentFeatured() : Flow<Either<Featured>> = flow {
+    override fun getCurrentFeatured() : Flow<Either<Featured?>> = flow {
         val featuredResponse = featuredService.getCurrentFeatured().getResponse()
 
         val state = when (featuredResponse.state) {
