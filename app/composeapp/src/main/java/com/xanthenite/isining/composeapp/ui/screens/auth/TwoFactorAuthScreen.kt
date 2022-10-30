@@ -81,7 +81,6 @@ fun TwoFactorContent(
         .background(MaterialTheme.colors.surface)
         .verticalScroll(rememberScrollState()))
     {
-        BackToLoginScreen(Modifier.align(Alignment.Start), onBackClick = onBackClick)
         TopMessage2fa()
         TwoFactorForm(
                 verificationCode =  verificationCode,
