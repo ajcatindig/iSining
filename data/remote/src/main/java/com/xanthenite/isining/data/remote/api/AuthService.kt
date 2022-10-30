@@ -6,6 +6,7 @@ import com.xanthenite.isining.data.remote.model.request.RegisterRequest
 import com.xanthenite.isining.data.remote.model.request.TwoFactorRequest
 import com.xanthenite.isining.data.remote.model.response.AuthResponse
 import com.xanthenite.isining.data.remote.model.response.ForgotResponse
+import com.xanthenite.isining.data.remote.model.response.LoginResponse
 import com.xanthenite.isining.data.remote.model.response.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,7 +19,7 @@ interface AuthService
 
     @Headers("Accept: application/json")
     @POST("api/sanctum/token")
-    suspend fun login(@Body authRequest: LoginRequest): Response<AuthResponse>
+    suspend fun login(@Body authRequest: LoginRequest): Response<LoginResponse>
 
     @Headers("Accept: application/json")
     @POST("api/register")

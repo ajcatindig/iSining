@@ -6,5 +6,6 @@ data class TwoFactorState(
         val isLoading: Boolean = false,
         val isLoggedIn: Boolean = false,
         val error: String? = null,
-        val verification_code : String
+        val verification_code : String = "",
+        val email : String = ""
 ) : State

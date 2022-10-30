@@ -2,6 +2,7 @@ package com.xanthenite.isining.core.repository
 
 import com.xanthenite.isining.core.model.AuthCredential
 import com.xanthenite.isining.core.model.ForgotResult
+import com.xanthenite.isining.core.model.LoginResult
 import com.xanthenite.isining.core.model.RegisterResult
 import javax.inject.Singleton
 
@@ -27,7 +28,7 @@ interface AuthRepository
     suspend fun getUserByEmailAndPassword(
             email: String,
             password: String)
-    : Either<AuthCredential>
+    : Either<LoginResult>
 
     /**
      *  Forgot Password
@@ -37,5 +38,5 @@ interface AuthRepository
     /**
      * Two Factor Authentication
      */
-    suspend fun authenticate(verification_code : String) : Either<AuthCredential>
+    suspend fun authenticate(code : String, email: String) : Either<AuthCredential>
 }

@@ -18,4 +18,14 @@ interface SessionManager {
      * Returns the current available token.
      */
     fun getToken(): String?
+
+    /**
+     * Save the email
+     */
+    fun saveEmail(email : String?)
+
+    /**
+     * Returns the email
+     */
+    fun getEmail():String?
 }

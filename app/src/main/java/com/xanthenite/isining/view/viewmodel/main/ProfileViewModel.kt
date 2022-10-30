@@ -74,6 +74,7 @@ class ProfileViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             sessionManager.saveToken(null)
+            sessionManager.saveEmail(null)
             setState { state -> state.copy(isUserLoggedIn = false) }
         }
     }

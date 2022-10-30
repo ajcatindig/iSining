@@ -3,6 +3,7 @@ package com.xanthenite.isining.repository
 import android.util.Log
 import com.xanthenite.isining.core.model.AuthCredential
 import com.xanthenite.isining.core.model.ForgotResult
+import com.xanthenite.isining.core.model.LoginResult
 import com.xanthenite.isining.core.model.RegisterResult
 import com.xanthenite.isining.core.repository.AuthRepository
 import com.xanthenite.isining.core.repository.Either
@@ -10,6 +11,7 @@ import com.xanthenite.isining.data.remote.api.AuthService
 import com.xanthenite.isining.data.remote.model.request.ForgotRequest
 import com.xanthenite.isining.data.remote.model.request.LoginRequest
 import com.xanthenite.isining.data.remote.model.request.RegisterRequest
+import com.xanthenite.isining.data.remote.model.request.TwoFactorRequest
 import com.xanthenite.isining.data.remote.model.response.State
 import com.xanthenite.isining.data.remote.util.getResponse
 import javax.inject.Inject
@@ -48,14 +50,14 @@ class AuthRepositoryImpl @Inject internal constructor(
     override suspend fun getUserByEmailAndPassword(
             email : String ,
             password : String)
-    : Either<AuthCredential>
+    : Either<LoginResult>
     {
 
         return runCatching {
             val authResponse = authService.login(LoginRequest(email, password)).getResponse()
 
             when (authResponse.state) {
-                State.SUCCESS -> Either.success(AuthCredential(authResponse.token!!))
+                State.TWO_FACTOR -> Either.success(LoginResult(authResponse.message.toString()))
                 else -> Either.error(authResponse.message!!)
             }
         }.getOrDefault(Either.error("Something went wrong!"))
@@ -75,9 +77,16 @@ class AuthRepositoryImpl @Inject internal constructor(
         }.getOrDefault(Either.error("Something went wrong!"))
     }
 
-    override suspend fun authenticate(verification_code : String) : Either<AuthCredential>
+    override suspend fun authenticate(code : String, email: String) : Either<AuthCredential>
     {
-        TODO("Not yet implemented")
+        return runCatching {
+            val twoFactorResponse = authService.authenticate(TwoFactorRequest(code, email)).getResponse()
+
+            when (twoFactorResponse.state) {
+                State.SUCCESS -> Either.success(AuthCredential(twoFactorResponse.token!!))
+                else -> Either.error(twoFactorResponse.message!!)
+            }
+        }.getOrDefault(Either.error("Something went wrong"))
     }
 
 }

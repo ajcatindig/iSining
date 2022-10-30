@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,11 +32,31 @@ import com.xanthenite.isining.composeapp.component.dialog.FailureDialog
 import com.xanthenite.isining.composeapp.component.dialog.LoaderDialog
 import com.xanthenite.isining.composeapp.ui.theme.typography
 import com.xanthenite.isining.composeapp.utils.ISiningPreview
+import com.xanthenite.isining.composeapp.utils.collectState
+import com.xanthenite.isining.view.viewmodel.auth.TwoFactorViewModel
 
 @Composable
-fun TwoFactorAuthScreen()
+fun TwoFactorAuthScreen(
+    viewModel: TwoFactorViewModel,
+    onNavigateToHome : () -> Unit,
+    onNavigateUp : () -> Unit
+)
 {
+    val state by viewModel.collectState()
 
+    TwoFactorContent(
+        isLoading = state.isLoading,
+        error = state.error,
+        verificationCode = state.verification_code,
+        onVerificationCodeChange = viewModel::setCode,
+        onSubmitClick = viewModel::authenticate,
+        onBackClick = onNavigateUp)
+
+    LaunchedEffect(state.isLoggedIn) {
+        if (state.isLoggedIn) {
+            onNavigateToHome()
+        }
+    }
 }
 
 @Composable
@@ -56,9 +77,9 @@ fun TwoFactorContent(
     }
 
     Column(modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
-            .verticalScroll(rememberScrollState()))
+        .fillMaxSize()
+        .background(MaterialTheme.colors.surface)
+        .verticalScroll(rememberScrollState()))
     {
         BackToLoginScreen(Modifier.align(Alignment.Start), onBackClick = onBackClick)
         TopMessage2fa()
@@ -80,14 +101,14 @@ fun TwoFactorForm(
     val isValidate by derivedStateOf { verificationCode.isNotBlank() }
 
     Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp),
            verticalArrangement = Arrangement.Center,
            horizontalAlignment = Alignment.CenterHorizontally)
     {
         Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
                horizontalAlignment = Alignment.CenterHorizontally,
                verticalArrangement = Arrangement.Center)
         {
@@ -126,9 +147,9 @@ fun TwoFactorForm(
                         onClick = onSubmitClick ,
                         enabled = isValidate ,
                         modifier = Modifier
-                                .fillMaxWidth()
-                                .height(85.dp)
-                                .padding(vertical = 16.dp , horizontal = 16.dp) ,
+                            .fillMaxWidth()
+                            .height(85.dp)
+                            .padding(vertical = 16.dp, horizontal = 16.dp) ,
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black) ,
                         shape = RoundedCornerShape(25.dp))
                 {
@@ -147,21 +168,21 @@ fun TopMessage2fa()
         Image(painter = painterResource(id = R.drawable.two_factor) ,
               contentDescription = "" ,
               modifier = Modifier
-                      .requiredSize(200.dp)
-                      .align(Alignment.CenterHorizontally))
+                  .requiredSize(200.dp)
+                  .align(Alignment.CenterHorizontally))
     }
     Text(text = "Two-Factor Authentication" ,
          style = typography.h4 ,
          modifier = Modifier
-                 .padding(horizontal = 16.dp , vertical = 16.dp)
-                 .fillMaxWidth() ,
+             .padding(horizontal = 16.dp, vertical = 16.dp)
+             .fillMaxWidth() ,
          textAlign = TextAlign.Center)
     Text(text = "To provide extra layer of security, we require Two-Factor Authentication everytime you login. " +
                 "Please open your Google Authenticator to access your 6-digit verification code.",
          style = typography.subtitle1 ,
          modifier = Modifier
-                 .padding(horizontal = 16.dp , vertical = 16.dp)
-                 .fillMaxWidth() ,
+             .padding(horizontal = 16.dp, vertical = 16.dp)
+             .fillMaxWidth() ,
          textAlign = TextAlign.Center)
 }
 

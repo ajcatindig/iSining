@@ -17,8 +17,18 @@ class SessionManagerImpl(private val sharedPreferences: SharedPreferences) : Ses
 
     override fun getToken(): String? = sharedPreferences.getString(KEY_TOKEN, null)
 
+
+    override fun saveEmail(email: String?) {
+        sharedPreferences.edit(commit = true) {
+            putString(EMAIL, email)
+        }
+    }
+
+    override fun getEmail(): String? = sharedPreferences.getString(EMAIL, null)
+
     companion object {
         private const val KEY_TOKEN = "auth_token"
+        private const val EMAIL = "login_email"
     }
 }
 

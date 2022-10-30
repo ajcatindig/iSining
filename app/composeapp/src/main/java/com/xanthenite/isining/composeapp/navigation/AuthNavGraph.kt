@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import com.xanthenite.isining.composeapp.ui.screens.auth.ForgotScreen
 import com.xanthenite.isining.composeapp.ui.screens.auth.LoginScreen
 import com.xanthenite.isining.composeapp.ui.screens.auth.RegisterScreen
+import com.xanthenite.isining.composeapp.ui.screens.auth.TwoFactorAuthScreen
 
 fun NavGraphBuilder.authNavGraph(navController : NavHostController)
 {
@@ -19,7 +20,8 @@ fun NavGraphBuilder.authNavGraph(navController : NavHostController)
                     onNavigateToSignUp = { navController.navigate(AuthScreen.SignUp.route) },
                     onNavigateToHome = { navController.popBackStack()
                                          navController.navigate(Graph.HOME)},
-                    onNavigateToForgot = {navController.navigate(AuthScreen.Forgot.route)})
+                    onNavigateToForgot = {navController.navigate(AuthScreen.Forgot.route)},
+                    onNavigateToTwoFactor = { navController.navigate(AuthScreen.TwoFactor.route) })
         }
         composable(route = AuthScreen.SignUp.route) {
             RegisterScreen(
@@ -29,6 +31,12 @@ fun NavGraphBuilder.authNavGraph(navController : NavHostController)
         composable(route = AuthScreen.Forgot.route) {
             ForgotScreen(onNavigateUp = { navController.navigateUp()} ,
                          viewModel = hiltViewModel())
+        }
+        composable(route = AuthScreen.TwoFactor.route) {
+            TwoFactorAuthScreen(viewModel = hiltViewModel(),
+                                onNavigateToHome = { navController.popBackStack()
+                                                     navController.navigate(Graph.HOME) },
+                                onNavigateUp = { navController.navigateUp() })
         }
     }
 }
@@ -51,4 +59,5 @@ sealed class AuthScreen(val route: String) {
     object Login : AuthScreen(route = "LOGIN")
     object SignUp : AuthScreen(route = "SIGN_UP")
     object Forgot : AuthScreen(route = "FORGOT")
+    object TwoFactor : AuthScreen(route = "TWO_FACTOR")
 }

@@ -43,7 +43,8 @@ fun LoginScreen(
         viewModel : LoginViewModel ,
         onNavigateToSignUp : () -> Unit ,
         onNavigateToForgot : () -> Unit ,
-        onNavigateToHome : () -> Unit
+        onNavigateToHome : () -> Unit,
+        onNavigateToTwoFactor : () -> Unit
 )
 {
     val state by viewModel.collectState()
@@ -62,6 +63,12 @@ fun LoginScreen(
     LaunchedEffect(state.isLoggedIn) {
         if (state.isLoggedIn) {
             onNavigateToHome()
+        }
+    }
+
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            onNavigateToTwoFactor()
         }
     }
 }
@@ -87,9 +94,9 @@ fun LoginContent(
     }
 
     Column(modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
-            .verticalScroll(rememberScrollState()))
+        .fillMaxSize()
+        .background(MaterialTheme.colors.surface)
+        .verticalScroll(rememberScrollState()))
     {
         TopGreeting()
 
@@ -114,9 +121,9 @@ fun TopGreeting()
             painter = painterResource(id = R.drawable.app_logo) ,
             contentDescription = "",
             modifier = Modifier
-                    .padding(top = 60.dp)
-                    .requiredSize(95.dp)
-                    .align(Alignment.CenterHorizontally),
+                .padding(top = 60.dp)
+                .requiredSize(95.dp)
+                .align(Alignment.CenterHorizontally),
             contentScale = ContentScale.FillBounds)
     }
 
