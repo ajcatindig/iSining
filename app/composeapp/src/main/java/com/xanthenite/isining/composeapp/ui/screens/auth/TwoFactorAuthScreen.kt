@@ -49,8 +49,7 @@ fun TwoFactorAuthScreen(
         error = state.error,
         verificationCode = state.verification_code,
         onVerificationCodeChange = viewModel::setCode,
-        onSubmitClick = viewModel::authenticate,
-        onBackClick = onNavigateUp)
+        onSubmitClick = viewModel::authenticate)
 
     LaunchedEffect(state.isLoggedIn) {
         if (state.isLoggedIn) {
@@ -65,8 +64,7 @@ fun TwoFactorContent(
         error : String? ,
         verificationCode : String ,
         onVerificationCodeChange : (String) -> Unit ,
-        onSubmitClick : () -> Unit ,
-        onBackClick : () -> Unit)
+        onSubmitClick : () -> Unit)
 {
     if (isLoading) {
         LoaderDialog()
@@ -162,7 +160,7 @@ fun TwoFactorForm(
 @Composable
 fun TopMessage2fa()
 {
-    Column(Modifier.fillMaxWidth())
+    Column(Modifier.fillMaxWidth().padding(top = 50.dp))
     {
         Image(painter = painterResource(id = R.drawable.two_factor) ,
               contentDescription = "" ,
@@ -185,15 +183,15 @@ fun TopMessage2fa()
          textAlign = TextAlign.Center)
 }
 
-@Composable
-fun BackToLoginScreen(modifier : Modifier, onBackClick : () -> Unit)
-{
-    IconButton(onClick = onBackClick, modifier.padding(horizontal = 8.dp, vertical = 20.dp))
-    {
-        Icon(Icons.Outlined.ArrowBackIos , contentDescription = "" ,
-             tint = MaterialTheme.colors.onPrimary)
-    }
-}
+//@Composable
+//fun BackToLoginScreen(modifier : Modifier, onBackClick : () -> Unit)
+//{
+//    IconButton(onClick = onBackClick, modifier.padding(horizontal = 8.dp, vertical = 20.dp))
+//    {
+//        Icon(Icons.Outlined.ArrowBackIos , contentDescription = "" ,
+//             tint = MaterialTheme.colors.onPrimary)
+//    }
+//}
 
 @Preview(showBackground = true)
 @Composable
@@ -203,6 +201,5 @@ fun Preview2FAScreen() = ISiningPreview {
             error = null,
             verificationCode =  "123-456",
             onVerificationCodeChange = {},
-            onSubmitClick = {},
-            onBackClick = {})
+            onSubmitClick = {})
 }

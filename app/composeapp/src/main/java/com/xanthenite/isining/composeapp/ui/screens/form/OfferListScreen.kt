@@ -87,7 +87,7 @@ fun OfferListContent(
                                 horizontalArrangement = Arrangement.Center ,
                                 verticalAlignment = Alignment.CenterVertically)
                             {
-                                Text(text = "You don't have any transactions" ,
+                                Text(text = "You don't have any offers." ,
                                      style = MaterialTheme.typography.h5 ,
                                      fontSize = 18.sp ,
                                      textAlign = TextAlign.Center)

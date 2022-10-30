@@ -88,7 +88,7 @@ fun CommissionListContent(
                                 horizontalArrangement = Arrangement.Center ,
                                 verticalAlignment = Alignment.CenterVertically)
                             {
-                                Text(text = "You don't have any transactions" ,
+                                Text(text = "You don't have any commissions." ,
                                      style = MaterialTheme.typography.h5 ,
                                      fontSize = 18.sp ,
                                      textAlign = TextAlign.Center)
