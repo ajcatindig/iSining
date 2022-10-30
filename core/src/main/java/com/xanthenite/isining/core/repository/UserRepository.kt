@@ -22,10 +22,11 @@ interface UserRepository
      * Updates current user profile.
      */
     suspend fun updateProfile(
-            name : String ,
             mobile_number : String ,
             address : String ,
-            bio : String
+            bio : String,
+            profile_photo_path : String,
+            name : String ,
     ) : Either<ManageProfileResult>
 
     /**

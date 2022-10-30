@@ -5,7 +5,7 @@ data class Transaction(
         val title : String,
         val price : Double,
         val address : String,
-        val description : String?,
+        val description : String? /*or note*/,
+        val verified_at : String?,
         val created_at : String,
-        val verified_at : String?
 )

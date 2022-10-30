@@ -1,7 +1,5 @@
 package com.xanthenite.isining.view.viewmodel.form
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.xanthenite.isining.core.repository.UserRepository
 import com.xanthenite.isining.di.RemoteRepository
@@ -40,6 +38,10 @@ class UpdateProfileViewModel @Inject constructor(
         setState { state -> state.copy(bio = bio) }
     }
 
+    fun setPicture(picture : String) {
+        setState { state -> state.copy(picture = picture) }
+    }
+
     fun loadUser()
     {
         userRepository.getCurrentUser()
@@ -51,7 +53,8 @@ class UpdateProfileViewModel @Inject constructor(
                                 name = data.name.orEmpty(),
                                 mobile_number = data.mobile_number.orEmpty(),
                                 address = data.address.orEmpty(),
-                                bio = data.bio.orEmpty()) }
+                                bio = data.bio.orEmpty(),
+                                picture = data.profile_photo_path.orEmpty()) }
                     }.onFailure { message ->
                         setState { state -> state.copy(isLoading = false, error = message) }
                     }
@@ -68,10 +71,11 @@ class UpdateProfileViewModel @Inject constructor(
             val mobile_number = currentState.mobile_number
             val address = currentState.address
             val bio = currentState.bio
+            val profile_photo_path = currentState.picture
 
             setState { state -> state.copy(isLoading = true) }
 
-            val response = userRepository.updateProfile(name, mobile_number, address, bio)
+            val response = userRepository.updateProfile(mobile_number, address, bio, profile_photo_path, name)
 
             response.onSuccess { message ->
                 setState { state ->

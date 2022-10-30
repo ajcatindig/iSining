@@ -38,24 +38,26 @@ class UserRepositoryImpl @Inject internal constructor(
     }
 
     override suspend fun updateProfile(
-            name : String ,
             mobile_number : String ,
             address : String ,
-            bio : String
+            bio : String,
+            profile_photo_path : String,
+            name : String
     ) : Either<ManageProfileResult>
     {
         return runCatching {
             val updateProfileResponse = userService.updateProfile(
                     UpdateProfileRequest(
-                            name,
                             mobile_number,
                             address,
-                            bio))
+                            bio,
+                            profile_photo_path,
+                            name))
                     .getResponse()
 
             when(updateProfileResponse.state) {
                 State.SUCCESS -> Either.success(ManageProfileResult(updateProfileResponse.message.toString()))
-                else -> Either.error(updateProfileResponse.message!!)
+                else -> Either.error(updateProfileResponse.message.toString())
             }
         }.getOrDefault(Either.error("Something went wrong!"))
     }
@@ -76,7 +78,7 @@ class UserRepositoryImpl @Inject internal constructor(
 
             when (changePassResponse.state) {
                 State.SUCCESS -> Either.success(ChangePassResult(changePassResponse.message.toString()))
-                else -> Either.error(changePassResponse.message!!)
+                else -> Either.error(changePassResponse.message.toString())
             }
         }.getOrDefault(Either.error("Something went wrong!"))
     }

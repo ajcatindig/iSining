@@ -15,7 +15,7 @@ interface UserService
     @GET("api/user/current")
     suspend fun getUserProfile() : Response<UserResponse>
 
-    @Headers("Accept: application/json", "Content-Type: multipart/form-data")
+    @Headers("Accept: application/json")
     @POST("api/user")
     suspend fun updateProfile(@Body updateProfileRequest : UpdateProfileRequest) : Response<UpdateProfileResponse>
 

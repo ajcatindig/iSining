@@ -1,12 +1,8 @@
 package com.xanthenite.isining.composeapp.ui.screens.form
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,10 +11,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -30,13 +24,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.skydoves.landscapist.glide.GlideImage
 import com.xanthenite.isining.composeapp.R
 import com.xanthenite.isining.composeapp.component.dialog.FailureDialog
 import com.xanthenite.isining.composeapp.component.dialog.LoaderDialog
 import com.xanthenite.isining.composeapp.component.dialog.SuccessDialog
-import com.xanthenite.isining.composeapp.ui.theme.lightBlue
-import com.xanthenite.isining.composeapp.ui.theme.offWhite
 import com.xanthenite.isining.composeapp.ui.theme.typography
 import com.xanthenite.isining.composeapp.utils.collectState
 import com.xanthenite.isining.view.viewmodel.form.UpdateProfileViewModel
@@ -64,7 +55,9 @@ fun ManageProfileScreen(
             address =  state.address,
             onAddressChange =  viewModel::setAddress,
             bio =  state.bio,
-            onBioChange =  viewModel::setBio)
+            onBioChange =  viewModel::setBio,
+            picture = state.picture,
+            onPictureChange = viewModel::setPicture)
 }
 
 @Composable
@@ -84,7 +77,9 @@ fun ManageProfileContent(
         address : String,
         onAddressChange : (String) -> Unit,
         bio : String,
-        onBioChange : (String) -> Unit)
+        onBioChange : (String) -> Unit,
+        picture : String,
+        onPictureChange : (String) -> Unit)
 {
     if (isLoading) {
         LoaderDialog()
@@ -247,7 +242,7 @@ fun ManageProfileForm(
                           keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })  ,
                           maxLines = 5)
 
-        Button(onClick = { onUpdateClick() } ,
+        Button(onClick = onUpdateClick ,
                enabled = isValidate ,
                modifier = Modifier
                        .fillMaxWidth()

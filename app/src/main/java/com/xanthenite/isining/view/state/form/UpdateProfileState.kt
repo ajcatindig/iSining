@@ -1,8 +1,6 @@
 package com.xanthenite.isining.view.state.form
 
-import androidx.compose.runtime.MutableState
 import com.xanthenite.isining.view.state.State
-import java.io.File
 
 data class UpdateProfileState(
         val isLoading : Boolean = false ,
@@ -12,6 +10,7 @@ data class UpdateProfileState(
         val mobile_number : String = "" ,
         val address : String = "" ,
         val bio : String = "" ,
+        val picture : String = "",
         val isValidUsername : Boolean? = null ,
         val isValidNumber : Boolean? = null ,
         val isValidAddress : Boolean? = null
