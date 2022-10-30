@@ -139,7 +139,7 @@ fun ManageProfileForm(
 {
     val helperText = ""
     val focusManager = LocalFocusManager.current
-    val isValidate by derivedStateOf { name.isNotBlank() && number.isNotBlank() && address.isNotBlank() && bio.isNotBlank() }
+    val isValidate by derivedStateOf { name.isNotBlank() && number.isNotBlank() && address.isNotBlank() }
 
 
     //Profile Photo
