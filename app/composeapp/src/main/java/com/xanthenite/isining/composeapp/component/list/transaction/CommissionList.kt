@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.xanthenite.isining.composeapp.component.cards.transaction.CommissionCard
 import com.xanthenite.isining.core.model.Commission
+import java.math.RoundingMode
 
 @Composable
 fun CommissionList(data : List<Commission>)
@@ -22,7 +23,7 @@ fun CommissionList(data : List<Commission>)
             itemContent = { index ->
                 CommissionCard(
                         title = index.artist_name,
-                        price = index.price.toString(),
+                        price = index.price.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toString(),
                         address = index.address,
                         note = index.description,
                         accepted_at = index.accepted_at,

@@ -9,6 +9,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.xanthenite.isining.composeapp.component.cards.transaction.TransactionCard
 import com.xanthenite.isining.core.model.Transaction
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 @Composable
 fun TransactionList(data : List<Transaction>)
@@ -22,9 +24,9 @@ fun TransactionList(data : List<Transaction>)
             itemContent = { index ->
                 TransactionCard(
                         title = index.title,
-                        price =  index.price.toString(),
+                        price =  index.amount.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toString(),
                         address =  index.address,
-                        description =  index.description,
+                        description =  index.note,
                         verified_at = index.verified_at,
                         dateCreated = index.created_at)
             },

@@ -43,7 +43,7 @@ fun TransactionCard(
                  .padding(vertical = 4.dp , horizontal = 8.dp)
                  .fillMaxWidth()
                  .wrapContentHeight()
-                 .size(200.dp),
+                 .size(220.dp),
         elevation = 2.dp)
     {
         Column(modifier = Modifier

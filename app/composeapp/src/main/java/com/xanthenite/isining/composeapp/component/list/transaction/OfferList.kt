@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.xanthenite.isining.composeapp.component.cards.transaction.OfferCard
 import com.xanthenite.isining.core.model.Offer
+import java.math.RoundingMode
 
 @Composable
 fun OfferList(data : List<Offer>)
@@ -22,7 +23,7 @@ fun OfferList(data : List<Offer>)
              itemContent = { index ->
                  OfferCard(
                          title = index.title,
-                         price = index.price.toString(),
+                         price = index.price.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toString(),
                          address = index.address,
                          note = index.note,
                          accepted_at = index.accepted_at,
