@@ -35,7 +35,8 @@ class ArtworkDetailViewModel @AssistedInject constructor(
             price = null,
             user_name = null,
             user = null,
-            pictures = listOf(null))))
+            pictures = listOf(null),
+            sold = null)))
 {
     private lateinit var selectedArtwork : Artwork
 

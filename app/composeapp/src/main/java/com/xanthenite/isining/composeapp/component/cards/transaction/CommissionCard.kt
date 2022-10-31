@@ -139,7 +139,7 @@ fun CommissionCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start)
                 {
-                    Text(text = "Description: ${note ?: "No Description Provided"}",
+                    Text(text = "Note: ${note ?: "No additional note provided"}",
                          style = MaterialTheme.typography.caption,
                          textAlign = TextAlign.Start,
                          fontSize = 16.sp,

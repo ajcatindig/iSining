@@ -63,7 +63,7 @@ class OfferFormViewModel @Inject constructor(
                 setState { state ->
                     state.copy(isLoading = false,
                                isSuccess = null,
-                               error = message,
+                               error = "Offer price should be greater than or equal to the original price.",
                                payment_channel_id = 0,
                                price = "",
                                address = "",
@@ -76,7 +76,6 @@ class OfferFormViewModel @Inject constructor(
 
     private fun validateInfo() : Boolean {
         val address = currentState.address
-
         val isValidAddress = UserValidator.isValidAddress(address)
 
         setState { state ->

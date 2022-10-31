@@ -8,7 +8,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,9 +32,7 @@ import com.xanthenite.isining.composeapp.component.anim.LottieAnimation
 import com.xanthenite.isining.composeapp.component.scaffold.ISiningScaffold
 import com.xanthenite.isining.composeapp.component.scaffold.detail.ArtworkDetailTopbar
 import com.xanthenite.isining.composeapp.R
-import com.xanthenite.isining.composeapp.ui.theme.lightBlue
-import com.xanthenite.isining.composeapp.ui.theme.lightGray
-import com.xanthenite.isining.composeapp.ui.theme.offWhite
+import com.xanthenite.isining.composeapp.ui.theme.*
 import com.xanthenite.isining.composeapp.utils.ISiningPreview
 import com.xanthenite.isining.composeapp.utils.collectState
 import com.xanthenite.isining.core.model.Artwork
@@ -109,8 +109,8 @@ fun ArtworkContent(
                         ConnectivityStatus(isConnectivityAvailable)
                     }
                     Surface(modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colors.surface))
+                        .fillMaxSize()
+                        .background(MaterialTheme.colors.surface))
                     {
                         ArtworkDetailBody(
                                 data = data,
@@ -139,6 +139,8 @@ fun ArtworkDetailBody(
         onNavigateToArtist : (Int) -> Unit ,
         onMakeOffer : (Int) -> Unit)
 {
+    val isEnabled by derivedStateOf { data.sold != 1 }
+
     LazyColumn {
         item {
             Column(modifier = Modifier.fillMaxSize())
@@ -149,8 +151,8 @@ fun ArtworkDetailBody(
                        verticalArrangement = Arrangement.Center)
                     {
                         Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 16.dp),
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically)
                         {
@@ -160,8 +162,8 @@ fun ArtworkDetailBody(
                                 GlideImage(
                                     imageModel = data.pictures.first().orEmpty() ,
                                     modifier = Modifier
-                                            .fillMaxWidth()
-                                            .size(250.dp) ,
+                                        .fillMaxWidth()
+                                        .size(250.dp) ,
                                     loading = {
                                         Box(modifier = Modifier.matchParentSize()) {
                                             CircularProgressIndicator(
@@ -174,8 +176,8 @@ fun ArtworkDetailBody(
                                         LottieAnimation(
                                             resId = R.raw.error_404,
                                             modifier = Modifier
-                                                    .matchParentSize()
-                                                    .align(Alignment.Center)
+                                                .matchParentSize()
+                                                .align(Alignment.Center)
                                             )
                                     }
                                 )
@@ -204,11 +206,12 @@ fun ArtworkDetailBody(
                             .fillMaxWidth()
                             .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start)
+                        horizontalArrangement = Arrangement.SpaceBetween)
                     {
                         Text(text = "by ${data.user_name.orEmpty()}",
                              style = MaterialTheme.typography.h5,
                              fontSize = 20.sp)
+                        AvailabilityChip(sold = data.sold)
                     }
                 }
                 /**[Description]*/
@@ -259,7 +262,7 @@ fun ArtworkDetailBody(
                     }
                     Row(modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.SpaceAround,
                         verticalAlignment = Alignment.CenterVertically)
                     {
                         LengthCard(length = data.length?:"N/A")
@@ -308,7 +311,7 @@ fun ArtworkDetailBody(
                                         CircularProgressIndicator(
                                                 modifier = Modifier.align(Alignment.Center),
                                                 color = MaterialTheme.colors.onPrimary
-                                                                 )
+                                        )
                                     }
                                 },
                                 failure = {
@@ -359,6 +362,7 @@ fun ArtworkDetailBody(
                 {
                     Button(
                             onClick = { onMakeOffer(data.id!!) },
+                            enabled = isEnabled,
                             modifier = Modifier
                                     .fillMaxWidth()
                                     .height(55.dp),
@@ -497,6 +501,48 @@ private fun TypeCard(type : String?)
                      fontSize = 16.sp,
                      textAlign = TextAlign.Center,
                      color = Color.Black)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AvailabilityChip(sold : Int?)
+{
+    val isSold = darkRed
+    val isAvailable = darkGreen
+    val Available = "AVAILABLE"
+    val Sold = "SOLD"
+
+    Card(modifier = Modifier
+        .width(105.dp)
+        .height(30.dp),
+        shape = RoundedCornerShape(10.dp),
+        backgroundColor = when (sold) {
+                1 -> isSold
+                else  -> isAvailable},
+        elevation = 0.dp)
+    {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 4.dp , vertical = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center)
+        {
+            Row(modifier = Modifier
+                .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically)
+            {
+                Text(text = when (sold) {
+                    1 -> Sold
+                    else -> Available
+                },
+                    style = MaterialTheme.typography.h5,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    maxLines = 1)
             }
         }
     }

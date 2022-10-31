@@ -32,7 +32,8 @@ fun TransactionCard(
         address : String,
         description : String?,
         verified_at : String?,
-        dateCreated : String)
+        dateCreated : String,
+        payment_channel : Int)
 {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd")
     val date = dateCreated.format(dateFormat)
@@ -43,7 +44,7 @@ fun TransactionCard(
                  .padding(vertical = 4.dp , horizontal = 8.dp)
                  .fillMaxWidth()
                  .wrapContentHeight()
-                 .size(220.dp),
+                 .size(245.dp),
         elevation = 2.dp)
     {
         Column(modifier = Modifier
@@ -157,29 +158,32 @@ fun TransactionCard(
                          overflow = TextOverflow.Ellipsis)
                 }
             }
-            //Date Created and status
+            //Payment Style
             Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
-                   verticalArrangement = Arrangement.Center,
-                   horizontalAlignment = Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .padding(start = 16.dp , end = 16.dp , bottom = 4.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally)
             {
                 Row(horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth())
                 {
-                    Text(text = "Submitted: $dateCreated" ,
-                         style = MaterialTheme.typography.caption ,
-                         textAlign = TextAlign.Start ,
-                         fontSize = 16.sp ,
-                         maxLines = 1 ,
-                         overflow = TextOverflow.Ellipsis)
+                    Text(text = when(payment_channel) {
+                            1 -> "Payment: Cash on Delivery"
+                            else -> "Payment: Online Payment"
+                        },
+                        style = MaterialTheme.typography.caption ,
+                        textAlign = TextAlign.Start ,
+                        fontSize = 16.sp ,
+                        maxLines = 1 ,
+                        overflow = TextOverflow.Ellipsis)
                 }
             }
             //Payment Status
             Column(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
+                    .padding(start = 16.dp , end = 16.dp , bottom = 4.dp),
                    verticalArrangement = Arrangement.Center,
                    horizontalAlignment = Alignment.CenterHorizontally)
             {
@@ -193,6 +197,25 @@ fun TransactionCard(
                          fontSize = 16.sp ,
                          maxLines = 1 ,
                          overflow = TextOverflow.Ellipsis)
+                }
+            }
+            //Date Created and status
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp , end = 16.dp , bottom = 8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally)
+            {
+                Row(horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth())
+                {
+                    Text(text = "Submitted: $dateCreated" ,
+                        style = MaterialTheme.typography.caption ,
+                        textAlign = TextAlign.Start ,
+                        fontSize = 16.sp ,
+                        maxLines = 1 ,
+                        overflow = TextOverflow.Ellipsis)
                 }
             }
         }
