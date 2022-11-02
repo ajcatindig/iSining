@@ -10,6 +10,6 @@ data class Artwork(
         val price : String?,
         val pictures : List<String?>,
         val user_name : String?,
+        val sold : Int?,
         val user : User?,
-        val sold : Int?
 )
