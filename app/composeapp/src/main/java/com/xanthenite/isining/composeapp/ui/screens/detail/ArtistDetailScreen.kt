@@ -203,8 +203,8 @@ fun ArtistContent(
                                                  style = MaterialTheme.typography.h5,
                                                  fontSize = 20.sp)
                                         }
-                                        if (data.artwork.isNotEmpty()) {
-                                            ArtworkLazyRow(data.artwork) { index -> onNavigateToArtwork(index.id!!) }
+                                        if (data.artworks.isNotEmpty()) {
+                                            ArtworkLazyRow(data.artworks) { index -> onNavigateToArtwork(index.id!!) }
                                         } else {
                                             Row(modifier = Modifier
                                                     .fillMaxWidth() ,

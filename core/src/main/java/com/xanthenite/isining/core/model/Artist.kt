@@ -12,5 +12,5 @@ data class Artist(
         val bio : String?,
         val email : String?,
         val profile_photo_path : String?,
-        val artwork : List<Artwork?> = emptyList()
+        val artworks : List<Artwork?> = emptyList()
 )
