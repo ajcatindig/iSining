@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.xanthenite.isining.composeapp.utils.IntentUtils
 import java.util.jar.Manifest
 
 @Composable
@@ -99,10 +100,5 @@ fun QRScanner(onNavigateUp : () -> Unit)
 @Composable
 fun LoadWebUrl(url: String) {
     val context = LocalContext.current
-    AndroidView(factory = {
-        WebView(context).apply {
-            webViewClient = WebViewClient()
-            loadUrl(url)
-        }
-    })
+    IntentUtils.launchBrowser(context, url)
 }

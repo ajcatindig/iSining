@@ -191,7 +191,7 @@ fun ExhibitContent(
                                                  style = MaterialTheme.typography.h5,
                                                  fontSize = 20.sp)
                                         }
-                                        data.artwork?.let { it -> ArtworkLazyRow(it) { index -> onNavigateToArtwork(index.id!!) } }
+                                        data.artworks?.let { it -> ArtworkLazyRow(it) { index -> onNavigateToArtwork(index.id!!) } }
                                     }
                                 }
                             }

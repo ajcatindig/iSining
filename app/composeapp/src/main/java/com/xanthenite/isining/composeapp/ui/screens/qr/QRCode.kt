@@ -30,8 +30,7 @@ class QRCode (val onQrCodeScanned: (String) -> Unit) : ImageAnalysis.Analyzer {
                     0,
                     image.width,
                     image.height,
-                    false
-                                                 )
+                    false)
             val binaryBmp = BinaryBitmap(HybridBinarizer(source))
             try {
                 val result = MultiFormatReader().apply {
