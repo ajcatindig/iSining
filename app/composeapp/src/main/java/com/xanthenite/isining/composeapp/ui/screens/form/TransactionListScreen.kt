@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,6 +19,7 @@ import com.xanthenite.isining.composeapp.component.anim.LottieAnimation
 import com.xanthenite.isining.composeapp.component.list.transaction.TransactionList
 import com.xanthenite.isining.composeapp.component.scaffold.ISiningScaffold
 import com.xanthenite.isining.composeapp.component.scaffold.form.TransactionTopbar
+import com.xanthenite.isining.composeapp.utils.IntentUtils
 import com.xanthenite.isining.composeapp.utils.collectState
 import com.xanthenite.isining.core.model.Transaction
 import com.xanthenite.isining.view.viewmodel.form.TransactionViewModel
@@ -46,6 +48,7 @@ fun TransactionListContent(
         data : List<Transaction>,
         onNavigateUp : () -> Unit)
 {
+
     ISiningScaffold(
         error = error,
         topAppBar = {

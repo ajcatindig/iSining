@@ -235,7 +235,7 @@ fun OfferForm(
             paymentChannel.forEach { index ->
                 Row(modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 4.dp)
+                        .padding(bottom = 0.dp)
                         .selectable(selected = (selectedChannel == index.id) , onClick = { onOptionSelected(index.id) } , role = Role.RadioButton),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically

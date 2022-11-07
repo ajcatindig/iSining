@@ -29,7 +29,8 @@ fun TransactionList(data : List<Transaction>)
                         description =  index.note,
                         verified_at = index.verified_at,
                         dateCreated = index.created_at,
-                        payment_channel = index.payment_channel_id)
+                        payment_channel = index.payment_channel_id,
+                        payment_link = index.payment_link.orEmpty())
             },
             key = { Triple(it.id, it.title, it.verified_at)}
         )
