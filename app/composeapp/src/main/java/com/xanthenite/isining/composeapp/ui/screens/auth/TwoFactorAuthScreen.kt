@@ -118,7 +118,7 @@ fun TwoFactorForm(
                 OutlinedTextField(
                         value = verificationCode ,
                         onValueChange = onVerificationCodeChange ,
-                        label = { Text(text = "Enter 6-digit verification code") } ,
+                        label = { Text(text = "Enter verification code") } ,
                         modifier = Modifier
                                 .padding(horizontal = 16.dp , vertical = 8.dp),
                         leadingIcon = { Icon(Icons.Outlined.Security , "") } ,
